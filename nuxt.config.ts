@@ -2,5 +2,8 @@
 export default defineNuxtConfig({
     typescript: {
         strict: true
-    }
+    },
+    modules: [
+        '@nuxthq/ui'
+    ]
 })
