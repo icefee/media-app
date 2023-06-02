@@ -19,7 +19,7 @@
                     <ThumbLoader :src="videoData.pic" />
                 </div>
                 <div class="grow">
-                    <h4 class="text-3xl">{{ videoData.name }}</h4>
+                    <h4 class="text-2xl">{{ videoData.name }}</h4>
                     <p class="mb-2">{{ videoData.note }}</p>
                     <p v-if="videoData.subname">又名: {{ videoData.subname }}</p>
                     <p>类别: {{ videoData.type }}</p>
