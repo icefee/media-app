@@ -1,5 +1,6 @@
 import { getJson } from '~/adaptors';
 import { Api } from '~/util/config';
+import Clue from '~/util/clue';
 
 const getVideoData = async (url: string) => {
     try {
@@ -13,7 +14,8 @@ const getVideoData = async (url: string) => {
 
 export default defineEventHandler(
     async (event) => {
-        const { api, id } = event.context.params!;
+        const { id: queryId } = event.context.params!;
+        const { api, id } = Clue.parse(queryId)!;
         const { type } = getQuery(event);
         const apiUrl = `${Api.site}/api/video/${api}/${id}`;
         const data = await getVideoData(apiUrl);

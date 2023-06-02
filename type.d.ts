@@ -32,3 +32,56 @@ declare interface SearchMusic {
     url: string;
     poster: string;
 }
+
+declare interface SearchVideo {
+    key: string;
+    name: string;
+    rating: number;
+    page: SearchVideoPagination;
+    data: VideoSummary[];
+}
+
+declare interface SearchVideoPagination {
+    page: number;
+    pagecount: number;
+    pagesize: number;
+    recordcount: number;
+}
+
+declare interface VideoSummary {
+    id: number;
+    name: string;
+    note: string;
+    tid: number;
+    type: string;
+    dt: string;
+    last: string;
+}
+
+declare type VideoItem = {
+    label: string;
+    url: string;
+}
+
+declare type VideoSource = {
+    name: string;
+    urls: VideoItem[];
+}
+
+declare interface VideoInfo {
+    name: string;
+    subname?: string;
+    note: string;
+    pic: string;
+    type: string;
+    year: string;
+    actor?: string;
+    area?: string;
+    des: string;
+    director?: string;
+    lang: string;
+    last: string;
+    state: number;
+    tid: number;
+    dataList: VideoSource[];
+}
