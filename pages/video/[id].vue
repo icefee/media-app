@@ -21,7 +21,7 @@
                 <div class="grow">
                     <h4 class="text-xl">{{ videoData.name }}</h4>
                     <p class="mb-2">{{ videoData.note }}</p>
-                    <p v-if="videoData.subname">{{ videoData.note }}</p>
+                    <p v-if="videoData.subname">{{ videoData.subname }}</p>
                     <p>类别: {{ videoData.type }}</p>
                     <p>年份: {{ videoData.year }}</p>
                     <p v-if="videoData.area">地区: {{ videoData.area }}</p>
