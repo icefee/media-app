@@ -1,4 +1,7 @@
 <template>
+    <Head>
+        <Title>影视搜索</Title>
+    </Head>
     <div class="flex flex-col h-full overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
             <form @submit="onSearch">

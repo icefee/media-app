@@ -1,4 +1,7 @@
 <template>
+    <Head>
+        <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中' }}</Title>
+    </Head>
     <div
         class="bg-gradient-to-r from-pink-200 via-purple-300 to-pink-300 dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500 h-full overflow-y-auto">
         <div class="max-w-7xl mx-auto bg-white dark:bg-gray-950 shadow-md" v-if="data">
