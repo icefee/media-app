@@ -1,7 +1,7 @@
 <template>
     <div
         class="bg-gradient-to-r from-pink-200 via-purple-300 to-pink-300 dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500 h-full overflow-y-auto">
-        <div class="max-w-7xl mx-auto bg-white dark:bg-gray-900 shadow-md" v-if="data">
+        <div class="max-w-7xl mx-auto bg-white dark:bg-gray-950 shadow-md" v-if="data">
             <div :style="{
                 height: 'min(calc(min(100vw, 1200px) * 10 / 16), 600px)',
                 maxHeight: '100vh'
@@ -11,7 +11,7 @@
             <div class="p-3">
                 <Tab :options="['简介', '选集']" v-model:value="activeView" />
             </div>
-            <div class="flex p-2 space-x-2" v-if="activeView === 0">
+            <div class="flex p-2 min space-x-2" v-if="activeView === 0">
                 <div class="w-40 h-60 flex-shrink-0">
                     <ThumbLoader :src="videoData.pic" />
                 </div>
@@ -28,7 +28,7 @@
                     <p v-html="videoData.des" />
                 </div>
             </div>
-            <div class="flex flex-wrap p-2" v-if="activeView === 1">
+            <div class="flex flex-wrap p-2" :style="{ minHeight: '250px' }" v-if="activeView === 1">
                 <div class="p-1 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6" v-for="video, index in videoData.dataList[0].urls"
                     :key="index">
                     <UButton :color="activeEpisode === index ? 'primary' : 'gray'" variant="solid" block
