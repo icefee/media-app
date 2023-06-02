@@ -27,7 +27,6 @@
                     <p v-if="videoData.area">地区: {{ videoData.area }}</p>
                     <p v-if="videoData.director">导演: {{ videoData.director }}</p>
                     <p v-if="videoData.actor">演员: {{ videoData.actor }}</p>
-                    <p v-if="videoData.actor">演员: {{ videoData.actor }}</p>
                     <p v-html="videoData.des" />
                 </div>
             </div>
