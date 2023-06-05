@@ -112,7 +112,7 @@ const onTimeUpdate = (playTime: number) => {
 }
 
 const onEnded = () => {
-    if (activeEpisode.value < playList.value.length) {
+    if (activeEpisode.value < playList.value.length - 1) {
         updateEpisode(activeEpisode.value + 1)
     }
 }
