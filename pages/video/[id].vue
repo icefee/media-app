@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 const route = useRoute()
 
 const activeView = ref(0)
