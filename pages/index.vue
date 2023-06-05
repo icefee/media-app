@@ -2,7 +2,7 @@
     <Head>
         <Title>影视搜索</Title>
     </Head>
-    <div class="flex flex-col h-full overflow-hidden">
+    <div class="flex flex-col h-full bg-gray-200 dark:bg-gray-950 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
             <form @submit="onSearch">
                 <UInput v-model="keyword" size="lg" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"

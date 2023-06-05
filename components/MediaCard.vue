@@ -1,5 +1,5 @@
 <template>
-    <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-lg">
+    <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-md">
         <div class="w-24 h-36">
             <ThumbLoader :src="src" />
         </div>
@@ -8,7 +8,7 @@
             <div class="grow">
                 <div class="flex items-center self-start space-x-2">
                     <UBadge :label="type" />
-                    <span class="text-sm">{{ subtitle }}</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ subtitle }}</span>
                 </div>
             </div>
             <div class="flex justify-end">
