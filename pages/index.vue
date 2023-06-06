@@ -1,11 +1,17 @@
 <template>
     <Head>
-        <Title>影视搜索</Title>
+        <Title>音乐/影视搜索</Title>
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-950 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-4">
-            <form @submit="onSearch">
-                <UInput v-model="keyword" size="xl" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"
+            <form class="flex" @submit="onSearch">
+                <USelectMenu v-model="searchType" size="lg" :options="searchTypes">
+                    <template #label>
+                        <UIcon :name="searchType.icon" class="w-4 h-4" />
+                        {{ searchType.label }}
+                    </template>
+                </USelectMenu>
+                <UInput v-model="keyword" size="lg" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
                         <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
@@ -14,36 +20,85 @@
                 </UInput>
             </form>
         </div>
-        <div class="grow p-2 overflow-y-auto" v-if="searchComplete">
-            <div class="mb-5" v-for="resultGroup in searchResult" :key="resultGroup.key">
-                <div class="p-2">
-                    <h4>{{ resultGroup.name }}</h4>
+        <div class="grow relative p-2 overflow-y-auto" v-if="searchComplete">
+            <template v-if="lastSearchType === SearchType.music">
+                <div class="space-y-2 w-full md:max-w-xl">
+                    <MediaListItem v-for="music in searchMusicResult" :key="music.id" :src="music.poster"
+                        :title="music.name" :subtitle="music.artist">
+                        <template #tail>
+                            <UButton
+                                :icon="`i-heroicons-${playingMusic && playingMusic.id === music.id && musicPlaying ? 'pause' : 'play'}`"
+                                size="lg" color="green" variant="link" @click="togglePlay(music)" />
+                        </template>
+                    </MediaListItem>
                 </div>
-                <div class="flex flex-wrap gap-3">
-                    <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data" :key="video.id">
-                        <NuxtLink class="block" :href="videoUrl(resultGroup.key, video.id)" target="_blank">
-                            <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
-                                :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
-                        </NuxtLink>
+            </template>
+            <template v-else>
+                <div class="mb-5" v-for="resultGroup in searchVideoResult" :key="resultGroup.key">
+                    <div class="p-2">
+                        <h4>{{ resultGroup.name }}</h4>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data" :key="video.id">
+                            <NuxtLink class="block" :href="videoUrl(resultGroup.key, video.id)" target="_blank">
+                                <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
+                                    :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
+                            </NuxtLink>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
         <div class="flex grow justify-center items-center" v-else>
             <p class="opacity-50">🔍输入关键词开始搜索</p>
+        </div>
+        <div class="absolute w-0 h-0 overflow-hidden -z-50">
+            <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
+                :key="playingMusic.id" :src="playingMusic.url" preload="none" @play="musicPlaying = true"
+                @paste="musicPlaying = false" />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, shallowRef, nextTick } from 'vue'
 import Clue from '~/util/clue'
 
 const keyword = ref('')
 const loading = ref(false)
 const searchComplete = ref(false)
 
-const searchResult = ref<SearchVideo[]>([])
+enum SearchType {
+    music = 0,
+    video = 1
+}
+
+const searchTypes = [
+    {
+        type: SearchType.music,
+        label: '音乐',
+        icon: 'i-heroicons-musical-note-20-solid'
+    },
+    {
+        type: SearchType.video,
+        label: '影视',
+        icon: 'i-heroicons-film'
+    }
+]
+
+const searchType = ref(searchTypes[0])
+
+const lastSearchType = ref<SearchType>(SearchType.video)
+
+const searchMusicResult = ref<SearchMusic[]>([])
+
+const audioRef = shallowRef<HTMLAudioElement>()
+const musicPlaying = ref(false)
+
+
+const playingMusic = ref<SearchMusic>()
+
+const searchVideoResult = ref<SearchVideo[]>([])
 
 useLoading(loading)
 
@@ -55,24 +110,38 @@ const getData = async (s: string) => {
         s
     })
     try {
-        const { code, data, msg } = await $fetch<ApiJsonType<SearchVideo[]>>(
-            `/api/video/list?${searchParams}`
-        )
-        if (code === 0) {
-            searchResult.value = data
-            searchComplete.value = true
+        if (searchType.value.type === SearchType.music) {
+            const { code, data, msg } = await $fetch<ApiJsonType<SearchMusic[]>>(
+                `/api/music/list?${searchParams}`
+            )
+            if (code === 0) {
+                searchMusicResult.value = data
+                searchComplete.value = true
+                lastSearchType.value = SearchType.music
+                playingMusic.value = null
+            }
+            else {
+                throw new Error(msg)
+            }
         }
         else {
-            toast.add({
-                color: 'red',
-                title: `[错误]${msg}`
-            })
+            const { code, data, msg } = await $fetch<ApiJsonType<SearchVideo[]>>(
+                `/api/video/list?${searchParams}`
+            )
+            if (code === 0) {
+                searchVideoResult.value = data
+                searchComplete.value = true
+                lastSearchType.value = SearchType.video
+            }
+            else {
+                throw new Error(msg)
+            }
         }
     }
     catch (err) {
         toast.add({
             color: 'red',
-            title: '数据获取失败'
+            title: `[错误]${String(err)}`
         })
     }
 }
@@ -90,6 +159,17 @@ const onSearch = async (ev: Event) => {
         loading.value = true
         await getData(keyword.value)
         loading.value = false
+    }
+}
+
+const togglePlay = async (music: SearchMusic) => {
+    if (!playingMusic.value || playingMusic.value && music.id !== playingMusic.value.id) {
+        playingMusic.value = music;
+        await nextTick()
+        audioRef.value.play()
+    }
+    else {
+        musicPlaying.value ? audioRef.value.pause() : audioRef.value.play()
     }
 }
 

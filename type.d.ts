@@ -85,3 +85,11 @@ declare interface VideoInfo {
     tid: number;
     dataList: VideoSource[];
 }
+
+declare interface SearchMusic {
+    id: string;
+    name: string;
+    artist: string;
+    url: string;
+    poster: string;
+}
