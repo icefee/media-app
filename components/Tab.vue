@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-center space-x-2">
-        <UButton v-for="option, index in options" :key="index" :color="index === value ? 'primary' : 'gray'" variant="solid"
-            @click="handleChange(index)">
+        <UButton v-for="option, index in options" :key="index" :color="index === value ? 'primary' : 'gray'" :size="size"
+            :variant="variant" @click="handleChange(index)">
             {{ option }}
         </UButton>
     </div>
@@ -9,9 +9,13 @@
 
 <script lang="ts" setup>
 
+import { AppConfigInput } from 'nuxt/schema'
+
 defineProps<{
     options: string[];
     value: number;
+    size?: string;
+    variant?: string;
 }>()
 
 const emit = defineEmits<{

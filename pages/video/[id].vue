@@ -3,17 +3,16 @@
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中' }}</Title>
     </Head>
     <div
-        class="bg-gradient-to-r from-pink-200 via-purple-300 to-pink-300 dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500 h-full overflow-y-auto">
-        <div class="max-w-7xl min-h-full mx-auto bg-white dark:bg-gray-950 shadow-md" v-if="data">
+        class="bg-gradient-to-tr from-purple-300 to-pink-300 dark:from-indigo-500 dark:to-purple-500 h-full overflow-y-auto">
+        <div class="max-w-7xl min-h-full mx-auto bg-white dark:bg-black shadow-xl shadow-black" v-if="data">
             <div :style="{
-                height: 'min(calc(min(100vw, 1200px) * 10 / 16), 600px)',
-                maxHeight: '100vh'
-            }">
+                height: 'min(calc(min(100vw, 1200px) * 10 / 16), 600px)'
+            }" class="max-h-screen">
                 <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" hls @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
             </div>
-            <div class="p-3">
-                <Tab :options="['简介', '选集']" v-model:value="activeView" />
+            <div class="p-3 border-b border-gray-200 dark:border-gray-700">
+                <Tab :options="['简介', '选集']" size="lg" v-model:value="activeView" />
             </div>
             <div class="flex p-2 min space-x-2" v-if="activeView === 0">
                 <div class="w-40 h-60 flex-shrink-0">
@@ -34,7 +33,7 @@
             <div class="flex flex-wrap p-2" :style="{ minHeight: '250px' }" v-if="activeView === 1">
                 <div class="p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
                     v-for="video, index in videoData.dataList[0].urls" :key="index">
-                    <UButton :color="activeEpisode === index ? 'primary' : 'gray'" variant="solid" block
+                    <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid" block
                         @click="updateEpisode(index)">{{ video.label }}</UButton>
                 </div>
             </div>
@@ -99,6 +98,7 @@ const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 
 const updateEpisode = (index: number) => {
     activeEpisode.value = index;
+    initPlayTime.value = 0;
     setCatchedParams(videoId, {
         episode: index
     })

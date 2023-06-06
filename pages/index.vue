@@ -2,10 +2,10 @@
     <Head>
         <Title>影视搜索</Title>
     </Head>
-    <div class="flex flex-col h-full bg-gray-200 dark:bg-gray-950 overflow-hidden">
-        <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
+    <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-950 overflow-hidden">
+        <div class="flex justify-center items-center self-start w-full space-x-2 p-4">
             <form @submit="onSearch">
-                <UInput v-model="keyword" size="lg" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"
+                <UInput v-model="keyword" size="xl" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"
                     :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
                         <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
