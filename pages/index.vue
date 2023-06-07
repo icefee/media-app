@@ -22,15 +22,22 @@
         </div>
         <div class="grow relative p-2 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
-                <div class="space-y-2 w-full md:max-w-xl">
-                    <MediaListItem v-for="music in searchMusicResult" :key="music.id" :src="music.poster"
-                        :title="music.name" :subtitle="music.artist">
-                        <template #tail>
-                            <UButton
-                                :icon="`i-heroicons-${playingMusic && playingMusic.id === music.id && musicPlaying ? 'pause' : 'play'}`"
-                                size="lg" color="green" variant="link" @click="togglePlay(music)" />
-                        </template>
-                    </MediaListItem>
+                <div class="space-y-2 w-full md:max-w-xl mx-auto">
+                    <div class="relative" v-for="music in searchMusicResult" :key="music.id">
+                        <MediaListItem :src="music.poster" :title="music.name" :subtitle="music.artist">
+                            <template #tail>
+                                <UButton v-if="playingMusic && playingMusic.id === music.id && musicPlaying"
+                                    icon="i-heroicons-pause-20-solid" size="lg" color="green" variant="link"
+                                    @click="pause" />
+                                <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
+                                    @click="play(music)" />
+                            </template>
+                        </MediaListItem>
+                        <div class="absolute left-7 top-1/2 -translate-y-1/2 text-white"
+                            v-if="playingMusic && playingMusic.id === music.id">
+                            <MusicPlaying font-size="32px" :animating="musicPlaying" />
+                        </div>
+                    </div>
                 </div>
             </template>
             <template v-else>
@@ -54,8 +61,7 @@
         </div>
         <div class="absolute w-0 h-0 overflow-hidden -z-50">
             <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
-                :key="playingMusic.id" :src="playingMusic.url" preload="none" @play="musicPlaying = true"
-                @paste="musicPlaying = false" />
+                :key="playingMusic.id" :src="playingMusic.url" preload="none" @play="onPlay" @pause="onPause" loop />
         </div>
     </div>
 </template>
@@ -162,15 +168,25 @@ const onSearch = async (ev: Event) => {
     }
 }
 
-const togglePlay = async (music: SearchMusic) => {
-    if (!playingMusic.value || playingMusic.value && music.id !== playingMusic.value.id) {
-        playingMusic.value = music;
+const play = async (music: SearchMusic) => {
+    if (!playingMusic.value || playingMusic.value && playingMusic.value.id !== music.id) {
+        audioRef.value?.pause()
+        playingMusic.value = music
         await nextTick()
-        audioRef.value.play()
     }
-    else {
-        musicPlaying.value ? audioRef.value.pause() : audioRef.value.play()
-    }
+    audioRef.value.play()
+}
+
+const pause = async () => {
+    audioRef.value.pause()
+}
+
+const onPlay = () => {
+    musicPlaying.value = true;
+}
+
+const onPause = () => {
+    musicPlaying.value = false;
 }
 
 </script>

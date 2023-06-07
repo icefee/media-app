@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full">
         <USkeleton v-if="loading" class="w-full h-full rounded-none" />
-        <img v-else class="block h-full object-cover" :src="displayImageUrl" :alt="alt" />
+        <img v-else class="block w-full h-full object-cover" :src="displayImageUrl" :alt="alt" />
     </div>
 </template>
 
