@@ -23,21 +23,27 @@
         <div class="grow relative p-2 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
                 <div class="space-y-2 w-full md:max-w-xl mx-auto">
-                    <div class="relative" v-for="music in searchMusicResult" :key="music.id">
-                        <MediaListItem :src="music.poster" :title="music.name" :subtitle="music.artist">
-                            <template #tail>
-                                <UButton v-if="playingMusic && playingMusic.id === music.id && musicPlaying"
-                                    icon="i-heroicons-pause-20-solid" size="lg" color="green" variant="link"
-                                    @click="pause" />
-                                <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
-                                    @click="play(music)" />
-                            </template>
-                        </MediaListItem>
-                        <div class="absolute left-7 top-1/2 -translate-y-1/2 text-white"
-                            v-if="playingMusic && playingMusic.id === music.id">
-                            <MusicPlaying font-size="32px" :animating="musicPlaying" />
-                        </div>
-                    </div>
+                    <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
+                        :subtitle="music.artist">
+                        <template #leading>
+                            <div class="relative shrink-0">
+                                <UAvatar :class="{
+                                    'opacity-75': isActiveMusic(music),
+                                    'animate-spin': isActiveMusic(music) && musicPlaying
+                                }" :style="{ animationDuration: '8s' }" :src="music.poster" size="xl" />
+                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                                    v-if="isActiveMusic(music)">
+                                    <MusicPlaying fontSize="20px" :animating="musicPlaying" />
+                                </div>
+                            </div>
+                        </template>
+                        <template #trailing>
+                            <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid" size="lg"
+                                color="green" variant="link" @click="pause" />
+                            <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
+                                @click="play(music)" />
+                        </template>
+                    </MediaListItem>
                 </div>
             </template>
             <template v-else>
@@ -166,6 +172,10 @@ const onSearch = async (ev: Event) => {
         await getData(keyword.value)
         loading.value = false
     }
+}
+
+const isActiveMusic = (music: SearchMusic) => {
+    return playingMusic.value && playingMusic.value.id === music.id
 }
 
 const play = async (music: SearchMusic) => {
