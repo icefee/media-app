@@ -2,7 +2,7 @@
     <Head>
         <Title>音乐/影视搜索</Title>
     </Head>
-    <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-950 overflow-hidden">
+    <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-4">
             <form class="flex" @submit="onSearch">
                 <USelectMenu class="shrink-0" v-model="searchType" size="lg" :options="searchTypes">
@@ -20,9 +20,11 @@
                 </UInput>
             </form>
         </div>
-        <div class="grow relative p-2 overflow-y-auto" v-if="searchComplete">
+        <div class="grow relative px-2 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
-                <div class="space-y-2 w-full md:max-w-xl mx-auto">
+                <div class="space-y-2 pb-2 w-full md:max-w-xl mx-auto">
+                    <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-20">
+                        搜索到{{ searchMusicResult.length }}首歌曲</div>
                     <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
                         :subtitle="music.artist">
                         <template #leading>
