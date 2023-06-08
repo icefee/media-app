@@ -5,7 +5,7 @@
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-950 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-4">
             <form class="flex" @submit="onSearch">
-                <USelectMenu v-model="searchType" size="lg" :options="searchTypes">
+                <USelectMenu class="shrink-0" v-model="searchType" size="lg" :options="searchTypes">
                     <template #label>
                         <UIcon :name="searchType.icon" class="w-4 h-4" />
                         {{ searchType.label }}
@@ -28,12 +28,14 @@
                         <template #leading>
                             <div class="relative shrink-0">
                                 <UAvatar :class="{
-                                    'opacity-75': isActiveMusic(music),
-                                    'animate-spin': isActiveMusic(music) && musicPlaying
-                                }" :style="{ animationDuration: '8s' }" :src="music.poster" size="xl" />
+                                    'opacity-50': isActiveMusic(music),
+                                    'animate-spin': isActiveMusic(music)
+                                }"
+                                    :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
+                                    :src="music.poster" size="xl" />
                                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
                                     v-if="isActiveMusic(music)">
-                                    <MusicPlaying fontSize="20px" :animating="musicPlaying" />
+                                    <MusicPlaying :animating="musicPlaying" />
                                 </div>
                             </div>
                         </template>
