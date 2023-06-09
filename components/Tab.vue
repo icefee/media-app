@@ -9,8 +9,6 @@
 
 <script lang="ts" setup>
 
-import { AppConfigInput } from 'nuxt/schema'
-
 defineProps<{
     options: string[];
     value: number;
