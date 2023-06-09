@@ -11,7 +11,7 @@
                 <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" hls @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
             </div>
-            <div class="p-3 border-b border-gray-200 dark:border-gray-800">
+            <div class="p-3 border-b border-gray-200 dark:border-gray-900">
                 <Tab :options="['简介', '选集']" size="lg" v-model:value="activeView" />
             </div>
             <div class="flex p-2 min space-x-2" v-if="activeView === 0">
