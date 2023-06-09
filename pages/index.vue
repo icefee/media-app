@@ -71,7 +71,7 @@
         </div>
         <div class="absolute w-0 h-0 overflow-hidden -z-50">
             <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
-                :key="playingMusic.id" :src="playingMusic.url" preload="none" @play="onPlay" @pause="onPause" loop />
+                :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" loop />
         </div>
     </div>
 </template>
@@ -188,6 +188,7 @@ const play = async (music: SearchMusic) => {
         playingMusic.value = music
         await nextTick()
     }
+    audioRef.value.load()
     audioRef.value.play()
 }
 

@@ -29,8 +29,7 @@ export default defineEventHandler(
             }
         }
         catch (err) {
-            setHeader(event, 'Content-Type', 'image/svg+xml')
-            send(event, defaultPoster)
+            return sendRedirect(event, defaultPoster, 301)
         }
     }
 )
