@@ -30,11 +30,13 @@
                     <p v-html="videoData.des" />
                 </div>
             </div>
-            <div class="flex flex-wrap p-2" :style="{ minHeight: '250px' }" v-if="activeView === 1">
-                <div class="p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
-                    v-for="video, index in videoData.dataList[0].urls" :key="index">
-                    <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid" block
-                        @click="updateEpisode(index)">{{ video.label }}</UButton>
+            <div class="p-2" :style="{ minHeight: '250px' }" v-if="activeView === 1">
+                <div class="flex flex-wrap">
+                    <div class="p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
+                        v-for="video, index in videoData.dataList[0].urls" :key="index">
+                        <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid" block
+                            @click="updateEpisode(index)">{{ video.label }}</UButton>
+                    </div>
                 </div>
             </div>
         </div>
