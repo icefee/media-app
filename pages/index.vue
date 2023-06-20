@@ -23,7 +23,7 @@
         <div class="grow relative px-2 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
                 <div class="space-y-2 pb-2 w-full md:max-w-xl mx-auto">
-                    <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-20">
+                    <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-10">
                         搜索到{{ searchMusicResult.length }}首歌曲</div>
                     <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
                         :subtitle="music.artist">
