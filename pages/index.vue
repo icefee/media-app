@@ -22,48 +22,59 @@
         </div>
         <div class="grow relative px-2 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
-                <div class="space-y-2 pb-2 w-full md:max-w-xl mx-auto">
-                    <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-10">
-                        搜索到{{ searchMusicResult.length }}首歌曲</div>
-                    <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
-                        :subtitle="music.artist">
-                        <template #leading>
-                            <div class="relative shrink-0">
-                                <UAvatar :class="{
-                                    'opacity-50': isActiveMusic(music),
-                                    'animate-spin': isActiveMusic(music)
-                                }"
-                                    :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
-                                    :src="music.poster" size="xl" />
-                                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
-                                    v-if="isActiveMusic(music)">
-                                    <MusicPlaying :animating="musicPlaying" />
+                <template v-if="searchMusicResult.length > 0">
+                    <div class="space-y-2 pb-2 w-full md:max-w-xl mx-auto">
+                        <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-10">
+                            搜索到{{ searchMusicResult.length }}首歌曲</div>
+                        <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
+                            :subtitle="music.artist">
+                            <template #leading>
+                                <div class="relative shrink-0">
+                                    <UAvatar :class="{
+                                        'opacity-50': isActiveMusic(music),
+                                        'animate-spin': isActiveMusic(music)
+                                    }"
+                                        :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
+                                        :src="music.poster" size="xl" />
+                                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                                        v-if="isActiveMusic(music)">
+                                        <MusicPlaying :animating="musicPlaying" />
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
-                        <template #trailing>
-                            <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid" size="lg"
-                                color="green" variant="link" @click="pause" />
-                            <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
-                                @click="play(music)" />
-                        </template>
-                    </MediaListItem>
-                </div>
+                            </template>
+                            <template #trailing>
+                                <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid"
+                                    size="lg" color="green" variant="link" @click="pause" />
+                                <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
+                                    @click="play(music)" />
+                            </template>
+                        </MediaListItem>
+                    </div>
+                </template>
+                <template v-else>
+                    <Overlay text="💔没有搜索到相关的音乐" />
+                </template>
             </template>
             <template v-else>
-                <div class="mb-5" v-for="resultGroup in searchVideoResult" :key="resultGroup.key">
-                    <div class="p-2">
-                        <h4>{{ resultGroup.name }}</h4>
-                    </div>
-                    <div class="flex flex-wrap gap-3">
-                        <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data" :key="video.id">
-                            <NuxtLink class="block" :href="videoUrl(resultGroup.key, video.id)" target="_blank">
-                                <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
-                                    :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
-                            </NuxtLink>
+                <template v-if="searchVideoResult.length > 0">
+                    <div class="mb-5" v-for="resultGroup in searchVideoResult" :key="resultGroup.key">
+                        <div class="p-2">
+                            <h4>{{ resultGroup.name }}</h4>
+                        </div>
+                        <div class="flex flex-wrap">
+                            <div class="w-full p-2 sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data"
+                                :key="video.id">
+                                <NuxtLink class="block" :href="videoUrl(resultGroup.key, video.id)" target="_blank">
+                                    <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
+                                        :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
+                                </NuxtLink>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </template>
+                <template v-else>
+                    <Overlay text="💔没有搜索到相关的影视" />
+                </template>
             </template>
         </div>
         <div class="flex grow justify-center items-center" v-else>
@@ -82,7 +93,7 @@ import Clue from '~/util/clue'
 
 const keyword = ref('')
 const loading = ref(false)
-const searchComplete = ref(false)
+const searchComplete = ref(true)
 
 enum SearchType {
     music = 0,
@@ -104,7 +115,7 @@ const searchTypes = [
 
 const searchType = ref(searchTypes[0])
 
-const lastSearchType = ref<SearchType>(SearchType.video)
+const lastSearchType = ref<SearchType>(SearchType.music)
 
 const searchMusicResult = ref<SearchMusic[]>([])
 
