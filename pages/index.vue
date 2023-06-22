@@ -93,7 +93,7 @@ import Clue from '~/util/clue'
 
 const keyword = ref('')
 const loading = ref(false)
-const searchComplete = ref(true)
+const searchComplete = ref(false)
 
 enum SearchType {
     music = 0,
