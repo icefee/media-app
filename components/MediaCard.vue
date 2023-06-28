@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="flex justify-end">
-                <span class="text-sm">{{ tail }}</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">{{ tail }}</span>
             </div>
         </div>
     </div>
