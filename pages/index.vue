@@ -3,7 +3,7 @@
         <Title>音乐/影视搜索</Title>
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
-        <div class="flex justify-center items-center self-start w-full space-x-2 p-4">
+        <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
             <form class="flex" @submit="onSearch">
                 <USelectMenu class="shrink-0" v-model="searchType" size="lg" :options="searchTypes">
                     <template #label>
@@ -20,35 +20,37 @@
                 </UInput>
             </form>
         </div>
-        <div class="grow relative px-2 overflow-y-auto" v-if="searchComplete">
+        <div class="grow relative overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
                 <template v-if="searchMusicResult.length > 0">
-                    <div class="space-y-2 pb-2 w-full md:max-w-xl mx-auto">
-                        <div class="sticky top-0 p-3 bg-white dark:bg-black shadow-md shadow-black/25 rounded text-sm z-10">
+                    <div class="w-full md:max-w-xl mx-auto">
+                        <div class="sticky top-0 p-3 backdrop-blur-sm rounded text-sm z-10">
                             搜索到{{ searchMusicResult.length }}首歌曲</div>
-                        <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
-                            :subtitle="music.artist">
-                            <template #leading>
-                                <div class="relative shrink-0">
-                                    <UAvatar :class="{
-                                        'opacity-50': isActiveMusic(music),
-                                        'animate-spin': isActiveMusic(music)
-                                    }"
-                                        :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
-                                        :src="music.poster" size="xl" />
-                                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
-                                        v-if="isActiveMusic(music)">
-                                        <MusicPlaying :animating="musicPlaying" />
+                        <div class="space-y-2 pb-2 px-2">
+                            <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
+                                :subtitle="music.artist">
+                                <template #leading>
+                                    <div class="relative shrink-0">
+                                        <UAvatar :class="{
+                                            'opacity-50': isActiveMusic(music),
+                                            'animate-spin': isActiveMusic(music)
+                                        }"
+                                            :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
+                                            :src="music.poster" size="xl" />
+                                        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                                            v-if="isActiveMusic(music)">
+                                            <MusicPlaying :animating="musicPlaying" />
+                                        </div>
                                     </div>
-                                </div>
-                            </template>
-                            <template #trailing>
-                                <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid"
-                                    size="lg" color="green" variant="link" @click="pause" />
-                                <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
-                                    @click="play(music)" />
-                            </template>
-                        </MediaListItem>
+                                </template>
+                                <template #trailing>
+                                    <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid"
+                                        size="lg" color="green" variant="link" @click="pause" />
+                                    <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
+                                        @click="play(music)" />
+                                </template>
+                            </MediaListItem>
+                        </div>
                     </div>
                 </template>
                 <template v-else>
@@ -58,10 +60,10 @@
             <template v-else>
                 <template v-if="searchVideoResult.length > 0">
                     <div class="mb-5" v-for="resultGroup in searchVideoResult" :key="resultGroup.key">
-                        <div class="p-2">
+                        <div class="sticky top-0 backdrop-blur-sm pl-4 py-3">
                             <h4>{{ resultGroup.name }}</h4>
                         </div>
-                        <div class="flex flex-wrap">
+                        <div class="flex flex-wrap px-2">
                             <div class="w-full p-2 sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data"
                                 :key="video.id">
                                 <NuxtLink class="block" :href="`/video-play/?id=${videoId(resultGroup.key, video.id)}`"
