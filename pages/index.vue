@@ -11,11 +11,11 @@
                         {{ searchType.label }}
                     </template>
                 </USelectMenu>
-                <UInput v-model="keyword" size="lg" placeholder="输入关键词搜索.." icon="i-heroicons-magnifying-glass-20-solid"
-                    :ui="{ icon: { trailing: { pointer: '' } } }">
+                <UInput v-model="keyword" ref="inputRef" size="lg" placeholder="输入关键词搜索.."
+                    icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
                         <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
-                            :padded="false" @click="keyword = ''" />
+                            :padded="false" @click="clearInput" />
                     </template>
                 </UInput>
             </form>
@@ -104,6 +104,10 @@ const lastSearchType = ref<SearchType>(SearchType.music)
 
 const searchMusicResult = ref<SearchMusic[]>([])
 
+const inputRef = shallowRef<{
+    input: HTMLInputElement;
+}>()
+
 const audioRef = shallowRef<HTMLAudioElement>()
 
 const playState = reactive<PlayState>({
@@ -119,6 +123,11 @@ const searchVideoResult = ref<SearchVideo[]>([])
 useLoading(loading)
 
 const toast = useToast()
+
+const clearInput = () => {
+    keyword.value = ''
+    inputRef.value?.input.focus()
+}
 
 const showError = (errText: string) => {
     toast.add({
@@ -217,7 +226,9 @@ const play = async (music: SearchMusic) => {
 }
 
 const onSeek = (time: number) => {
-    audioRef.value.currentTime = time
+    if (audioRef.value) {
+        audioRef.value.currentTime = time
+    }
 }
 
 const pause = async () => {

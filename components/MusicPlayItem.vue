@@ -3,7 +3,7 @@
         <template #leading>
             <div class="relative flex items-center shrink-0">
                 <UAvatar :class="{
-                    'opacity-50': current,
+                    'opacity-75': current,
                     'animate-spin': current
                 }" :style="{ animationDuration: '12s', animationPlayState: playState.playing ? 'running' : 'paused' }"
                     :src="music.poster" size="xl" />
