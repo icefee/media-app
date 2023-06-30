@@ -193,6 +193,7 @@ const onSearch = async (ev: Event) => {
 
 watch(playingMusic, () => {
     hasError.value = false
+    playState.currentTime = 0
     playState.duration = 0
 })
 
