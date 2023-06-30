@@ -4,7 +4,7 @@
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
-            <form class="flex" @submit="onSearch">
+            <form class="flex" @submit.prevent="onSearch">
                 <USelectMenu class="shrink-0" v-model="searchType" size="lg" :options="searchTypes">
                     <template #label>
                         <UIcon :name="searchType.icon" class="w-4 h-4" />
@@ -27,29 +27,9 @@
                         <div class="sticky top-0 p-3 backdrop-blur-sm rounded text-sm z-10">
                             搜索到{{ searchMusicResult.length }}首歌曲</div>
                         <div class="space-y-2 pb-2 px-2">
-                            <MediaListItem v-for="music in searchMusicResult" :key="music.id" :title="music.name"
-                                :subtitle="music.artist">
-                                <template #leading>
-                                    <div class="relative shrink-0">
-                                        <UAvatar :class="{
-                                            'opacity-50': isActiveMusic(music),
-                                            'animate-spin': isActiveMusic(music)
-                                        }"
-                                            :style="{ animationDuration: '12s', animationPlayState: musicPlaying ? 'running' : 'paused' }"
-                                            :src="music.poster" size="xl" />
-                                        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
-                                            v-if="isActiveMusic(music)">
-                                            <MusicPlaying :animating="musicPlaying" />
-                                        </div>
-                                    </div>
-                                </template>
-                                <template #trailing>
-                                    <UButton v-if="isActiveMusic(music) && musicPlaying" icon="i-heroicons-pause-20-solid"
-                                        size="lg" color="green" variant="link" @click="pause" />
-                                    <UButton v-else icon="i-heroicons-play-20-solid" size="lg" color="green" variant="link"
-                                        @click="play(music)" />
-                                </template>
-                            </MediaListItem>
+                            <MusicPlayItem v-for="music in searchMusicResult" :key="music.id" :music="music"
+                                :current="isActiveMusic(music)" :playState="playState" :error="hasError" @pause="pause"
+                                @play="play(music)" @seek="onSeek" />
                         </div>
                     </div>
                 </template>
@@ -85,18 +65,20 @@
         </div>
         <div class="absolute w-0 h-0 overflow-hidden -z-50">
             <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
-                :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" loop />
+                :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" @durationchange="onDurationChange"
+                @timeupdate="onTimeUpdate" @error="onError" loop />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, nextTick } from 'vue'
+import { ref, reactive, shallowRef, nextTick, watch } from 'vue'
 import Clue from '~/util/clue'
 
 const keyword = ref('')
 const loading = ref(false)
 const searchComplete = ref(false)
+const hasError = ref(false)
 
 enum SearchType {
     music = 0,
@@ -123,8 +105,12 @@ const lastSearchType = ref<SearchType>(SearchType.music)
 const searchMusicResult = ref<SearchMusic[]>([])
 
 const audioRef = shallowRef<HTMLAudioElement>()
-const musicPlaying = ref(false)
 
+const playState = reactive<PlayState>({
+    playing: false,
+    duration: 0,
+    currentTime: 0
+})
 
 const playingMusic = ref<SearchMusic>()
 
@@ -133,6 +119,14 @@ const searchVideoResult = ref<SearchVideo[]>([])
 useLoading(loading)
 
 const toast = useToast()
+
+const showError = (errText: string) => {
+    toast.add({
+        color: 'red',
+        icon: 'i-heroicons-x-circle-20-solid',
+        title: errText
+    })
+}
 
 const getData = async (s: string) => {
 
@@ -169,10 +163,7 @@ const getData = async (s: string) => {
         }
     }
     catch (err) {
-        toast.add({
-            color: 'red',
-            title: `[错误]${String(err)}`
-        })
+        showError(`[错误]${String(err)}`)
     }
 }
 
@@ -184,9 +175,6 @@ const videoUrl = (api: string, id: number | string) => {
 }
 
 const onSearch = async (ev: Event) => {
-
-    ev.preventDefault();
-
     if (!loading.value) {
         loading.value = true
         await getData(keyword.value)
@@ -194,18 +182,42 @@ const onSearch = async (ev: Event) => {
     }
 }
 
+watch(playingMusic, () => {
+    hasError.value = false
+    playState.duration = 0
+})
+
 const isActiveMusic = (music: SearchMusic) => {
-    return playingMusic.value && playingMusic.value.id === music.id
+    return playingMusic.value !== null && playingMusic.value.id === music.id
 }
+
+const tryToPlay = async () => {
+    try {
+        await audioRef.value.play()
+    }
+    catch (err) {
+        console.warn(err)
+    }
+}
+
+const showPlayFailError = () => showError('播放出错, 当前歌曲无法播放')
 
 const play = async (music: SearchMusic) => {
     if (!playingMusic.value || playingMusic.value && playingMusic.value.id !== music.id) {
         audioRef.value?.pause()
         playingMusic.value = music
         await nextTick()
+        audioRef.value.load()
     }
-    audioRef.value.load()
-    audioRef.value.play()
+    else if (hasError.value) {
+        showPlayFailError()
+        return;
+    }
+    await tryToPlay()
+}
+
+const onSeek = (time: number) => {
+    audioRef.value.currentTime = time
 }
 
 const pause = async () => {
@@ -213,11 +225,23 @@ const pause = async () => {
 }
 
 const onPlay = () => {
-    musicPlaying.value = true;
+    playState.playing = true
 }
 
 const onPause = () => {
-    musicPlaying.value = false;
+    playState.playing = false
 }
 
+const onDurationChange = () => {
+    playState.duration = audioRef.value.duration
+}
+
+const onTimeUpdate = () => {
+    playState.currentTime = audioRef.value.currentTime
+}
+
+const onError = () => {
+    hasError.value = true
+    showPlayFailError()
+}
 </script>

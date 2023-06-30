@@ -25,14 +25,6 @@ declare interface SearchTask<T = unknown> {
     success: boolean;
 }
 
-declare interface SearchMusic {
-    id: string;
-    name: string;
-    artist: string;
-    url: string;
-    poster: string;
-}
-
 declare interface SearchVideo {
     key: string;
     name: string;
@@ -92,4 +84,10 @@ declare interface SearchMusic {
     artist: string;
     url: string;
     poster: string;
+}
+
+declare interface PlayState {
+    playing: boolean;
+    duration: number;
+    currentTime: number;
 }
