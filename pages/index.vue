@@ -5,12 +5,14 @@
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
             <form class="flex" @submit.prevent="onSearch">
-                <USelectMenu class="shrink-0" v-model="searchType" size="lg" :options="searchTypes">
-                    <template #label>
-                        <UIcon :name="searchType.icon" class="w-4 h-4" />
-                        {{ searchType.label }}
-                    </template>
-                </USelectMenu>
+                <div class="shrink-0">
+                    <USelectMenu v-model="searchType" size="lg" :options="searchTypes">
+                        <template #label>
+                            <UIcon :name="searchType.icon" class="w-4 h-4" />
+                            {{ searchType.label }}
+                        </template>
+                    </USelectMenu>
+                </div>
                 <UInput v-model="keyword" ref="inputRef" size="lg" placeholder="输入关键词搜索.."
                     icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
