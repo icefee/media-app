@@ -256,6 +256,7 @@ const onTimeUpdate = () => {
 
 const onError = () => {
     hasError.value = true
+    playState.playing = false
     showPlayFailError()
 }
 </script>
