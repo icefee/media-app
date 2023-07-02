@@ -62,7 +62,7 @@
                 </template>
             </template>
         </div>
-        <div class="flex grow justify-center items-center" v-else>
+        <div class="flex grow justify-center items-center" v-else-if="!loading">
             <p class="opacity-50">🔍输入关键词开始搜索</p>
         </div>
         <div class="absolute w-0 h-0 overflow-hidden -z-50">
