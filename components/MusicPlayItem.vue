@@ -10,8 +10,8 @@
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" v-if="current">
                     <MusicPlaying :animating="playState.playing" />
                 </div>
-                <div class="absolute inset-0 scale-110 text-violet-400" v-if="current && !isMediaReady && !error">
-                    <Spinner />
+                <div class="absolute inset-0 scale-110" v-if="current && !isMediaReady && !error">
+                    <Spinner class="text-primary-500 dark:text-primary-400" fill />
                 </div>
             </div>
         </template>
