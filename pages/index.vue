@@ -48,11 +48,11 @@
                         <div class="flex flex-wrap px-2">
                             <div class="w-full p-2 sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data"
                                 :key="video.id">
-                                <NuxtLink class="block" :href="`/video-play/?id=${videoId(resultGroup.key, video.id)}`"
+                                <a class="block" :href="`/video-play/?id=${videoId(resultGroup.key, video.id)}`"
                                     target="_blank">
                                     <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
                                         :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
-                                </NuxtLink>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@ const videoUrl = (api: string, id: number | string) => {
     return `/video/${sid}`
 }
 
-const onSearch = async (ev: Event) => {
+const onSearch = async () => {
     if (!loading.value) {
         loading.value = true
         await getData(keyword.value)
