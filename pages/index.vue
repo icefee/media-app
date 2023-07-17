@@ -180,10 +180,10 @@ const getData = async (s: string) => {
     }
 }
 
-const videoId = (api: string, id: number | string) => Clue.create(api, id)
+const videoId = (...args: Parameters<typeof Clue.create>) => Clue.create(...args)
 
-const videoUrl = (api: string, id: number | string) => {
-    const sid = videoId(api, id)
+const videoUrl = (...args: Parameters<typeof Clue.create>) => {
+    const sid = videoId(...args)
     return `/video/${sid}`
 }
 
