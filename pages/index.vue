@@ -13,7 +13,7 @@
                         </template>
                     </USelectMenu>
                 </div>
-                <UInput v-model="keyword" ref="inputRef" size="lg" placeholder="输入关键词搜索.."
+                <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
                     icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
                     <template #trailing>
                         <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
