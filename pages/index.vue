@@ -3,8 +3,11 @@
         <Title>音乐/影视搜索</Title>
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
-        <div class="flex justify-center items-center self-start w-full space-x-2 p-3">
-            <form class="flex" @submit.prevent="onSearch">
+        <div class="absolute z-30 left-0 top-0 flex justify-center items-center self-start w-full backdrop-blur-sm border-black/5 dark:border-white/5 space-x-2 p-3"
+            :class="{
+                'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
+            }">
+            <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
                 <div class="shrink-0">
                     <USelectMenu v-model="searchType" size="lg" :options="searchTypes">
                         <template #label>
@@ -13,16 +16,18 @@
                         </template>
                     </USelectMenu>
                 </div>
-                <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
-                    icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
-                    <template #trailing>
-                        <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
-                            :padded="false" @click="clearInput" />
-                    </template>
-                </UInput>
+                <div class="grow sm:grow-0">
+                    <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
+                        icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
+                        <template #trailing>
+                            <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                                :padded="false" @click="clearInput" />
+                        </template>
+                    </UInput>
+                </div>
             </form>
         </div>
-        <div class="grow relative overflow-y-auto" v-if="searchComplete">
+        <div class="h-full relative pt-16 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
                 <template v-if="searchMusicResult.length > 0">
                     <div class="w-full md:max-w-xl mx-auto">
