@@ -8,23 +8,28 @@
                 'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
             }">
             <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
-                <div class="shrink-0">
-                    <USelectMenu v-model="searchType" size="lg" :options="searchTypes">
-                        <template #label>
-                            <UIcon :name="searchType.icon" class="w-4 h-4" />
-                            {{ searchType.label }}
-                        </template>
-                    </USelectMenu>
-                </div>
-                <div class="grow sm:grow-0">
-                    <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
-                        icon="i-heroicons-magnifying-glass-20-solid" :ui="{ icon: { trailing: { pointer: '' } } }">
-                        <template #trailing>
-                            <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
-                                :padded="false" @click="clearInput" />
-                        </template>
-                    </UInput>
-                </div>
+                <USelectMenu v-model="searchType" size="lg" :options="searchTypes" :uiMenu="{
+                    wrapper: 'relative shrink-0'
+                }">
+                    <template #label>
+                        <UIcon :name="searchType.icon" class="w-4 h-4" />
+                        {{ searchType.label }}
+                    </template>
+                </USelectMenu>
+                <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
+                    icon="i-heroicons-magnifying-glass-20-solid" :ui="{
+                        wrapper: 'relative grow sm:grow-0',
+                        icon: {
+                            trailing: {
+                                pointer: ''
+                            }
+                        }
+                    }">
+                    <template #trailing>
+                        <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
+                            :padded="false" @click="clearInput" />
+                    </template>
+                </UInput>
             </form>
         </div>
         <div class="h-full relative pt-16 overflow-y-auto" v-if="searchComplete">
@@ -53,7 +58,7 @@
                         <div class="flex flex-wrap px-2">
                             <div class="w-full p-2 sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data"
                                 :key="video.id">
-                                <a class="block" :href="`/video-play/?id=${videoId(resultGroup.key, video.id)}`"
+                                <a class="block" :href="`/video/play/${videoId(resultGroup.key, video.id)}`"
                                     target="_blank">
                                     <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
                                         :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />

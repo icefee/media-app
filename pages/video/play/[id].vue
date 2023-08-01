@@ -12,32 +12,37 @@
                     @ended="onEnded" />
             </div>
             <div class="p-3 border-b border-gray-200 dark:border-gray-900">
-                <Tab :options="['简介', '选集']" size="lg" v-model:value="activeView" />
-            </div>
-            <div class="flex p-2 min space-x-2" v-if="activeView === 0">
-                <div class="w-40 h-60 flex-shrink-0">
-                    <ThumbLoader :src="videoData.pic" />
-                </div>
-                <div class="grow">
-                    <h4 class="text-2xl">{{ videoData.name }}</h4>
-                    <p class="mb-2">{{ videoData.note }}</p>
-                    <p v-if="videoData.subname">又名: {{ videoData.subname }}</p>
-                    <p>类别: {{ videoData.type }}</p>
-                    <p>年份: {{ videoData.year }}</p>
-                    <p v-if="videoData.area">地区: {{ videoData.area }}</p>
-                    <p v-if="videoData.director">导演: {{ videoData.director }}</p>
-                    <p v-if="videoData.actor">演员: {{ videoData.actor }}</p>
-                    <p v-html="videoData.des" />
-                </div>
-            </div>
-            <div class="p-2" :style="{ minHeight: '250px' }" v-if="activeView === 1">
-                <div class="flex flex-wrap">
-                    <div class="p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6"
-                        v-for="video, index in videoData.dataList[0].urls" :key="index">
-                        <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid" block
-                            @click="updateEpisode(index)">{{ video.label }}</UButton>
-                    </div>
-                </div>
+                <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]">
+                    <template #profile>
+                        <div class="flex p-2 min space-x-2">
+                            <div class="w-40 h-60 flex-shrink-0">
+                                <ThumbLoader :src="videoData.pic" />
+                            </div>
+                            <div class="grow">
+                                <h4 class="text-2xl">{{ videoData.name }}</h4>
+                                <p class="mb-2">{{ videoData.note }}</p>
+                                <p v-if="videoData.subname">又名: {{ videoData.subname }}</p>
+                                <p>类别: {{ videoData.type }}</p>
+                                <p>年份: {{ videoData.year }}</p>
+                                <p v-if="videoData.area">地区: {{ videoData.area }}</p>
+                                <p v-if="videoData.director">导演: {{ videoData.director }}</p>
+                                <p v-if="videoData.actor">演员: {{ videoData.actor }}</p>
+                                <p v-html="videoData.des" />
+                            </div>
+                        </div>
+                    </template>
+                    <template #series>
+                        <div class="p-2" :style="{ minHeight: '250px' }">
+                            <div class="flex flex-wrap">
+                                <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
+                                    v-for="video, index in videoData.dataList[0].urls" :key="index">
+                                    <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid"
+                                        block @click="updateEpisode(index)">{{ video.label }}</UButton>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </UTabs>
             </div>
         </div>
         <div class="flex h-full justify-center items-center" v-else-if="error">
@@ -54,7 +59,6 @@
 import { ref, computed, onMounted } from 'vue'
 const route = useRoute()
 
-const activeView = ref(0)
 const activeSource = ref(0)
 const activeEpisode = ref(0)
 

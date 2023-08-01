@@ -1,5 +1,6 @@
 {
-  "name": "nuxt-app",
+  "name": "media-app",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -9,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxthq/ui": "^2.5.0",
+    "@nuxthq/ui": "npm:@nuxthq/ui-edge@latest",
     "@types/node": "^18",
     "nuxt": "^3.5.2"
   },
