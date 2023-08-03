@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-import { shallowRef, withDefaults, onMounted, onUnmounted, watch } from 'vue'
+import { shallowRef, onMounted, onUnmounted, watch } from 'vue'
 import Hls from 'hls.js'
 
 const props = withDefaults(defineProps<{
