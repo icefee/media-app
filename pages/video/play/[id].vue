@@ -2,19 +2,25 @@
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中' }}</Title>
     </Head>
-    <div
-        class="bg-gradient-to-tr from-purple-300 to-pink-300 dark:from-indigo-500 dark:to-purple-500 h-full overflow-y-auto">
-        <div class="max-w-7xl min-h-full mx-auto bg-white dark:bg-black shadow-xl shadow-black" v-if="data">
+    <div class="bg-gradient-to-tr from-purple-300 to-pink-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
+        <div class="flex flex-col sm:block max-w-5xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
+            v-if="data">
             <div :style="{
                 height: 'min(calc(min(100vw, 1200px) * 10 / 16), 600px)'
-            }" class="max-h-screen">
+            }" class="max-h-screen grow-0 shrink-0">
                 <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" hls @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
             </div>
-            <div class="p-3 border-b border-gray-200 dark:border-gray-900">
-                <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]">
+            <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
+                <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
+            </div>
+            <div class="p-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
+                <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
+                    wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
+                    container: 'relative grow-1 overflow-y-auto'
+                }">
                     <template #profile>
-                        <div class="flex p-2 min space-x-2">
+                        <div class="flex space-x-2">
                             <div class="w-40 h-60 flex-shrink-0">
                                 <ThumbLoader :src="videoData.pic" />
                             </div>
@@ -133,5 +139,4 @@ onMounted(() => {
         initPlayTime.value = params.initPlayTime ?? 0;
     }
 })
-
 </script>

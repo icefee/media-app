@@ -24,12 +24,12 @@ const emit = defineEmits<{
 }>()
 
 const videoRef = shallowRef<HTMLVideoElement>()
-const hls = shallowRef<Hls>()
+let hls: Hls | null = null
 
 const canPlayEventFired = shallowRef(false)
 
 const onMainfestParsed = () => {
-    hls.value.startLoad(props.initPlayTime)
+    hls.startLoad(props.initPlayTime)
 }
 
 const onMediaAttached = () => {
@@ -52,15 +52,15 @@ const tryToAutoPlay = async () => {
 const initPlayer = () => {
     const video = videoRef.value;
     if (props.hls && Hls.isSupported()) {
-        if (!hls.value) {
-            hls.value = new Hls({
+        if (!hls) {
+            hls = new Hls({
                 autoStartLoad: false
             });
-            hls.value.attachMedia(video);
+            hls.attachMedia(video);
         }
-        hls.value.on(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
-        hls.value.on(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
-        hls.value.loadSource(props.url);
+        hls.on(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
+        hls.on(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
+        hls.loadSource(props.url);
     }
     else {
         video.src = props.url;
@@ -73,7 +73,7 @@ const fastSeek = (time: number) => {
 }
 
 const onCanPlay = () => {
-    if (!hls.value && !canPlayEventFired.value) {
+    if (!hls && !canPlayEventFired.value) {
         if (props.initPlayTime > 0) {
             fastSeek(props.initPlayTime)
         }
@@ -91,10 +91,10 @@ const onEnded = () => {
 }
 
 const disposePlayer = () => {
-    hls.value.off(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
-    hls.value.off(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
-    hls.value?.detachMedia();
-    hls.value?.destroy();
+    hls.off(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
+    hls.off(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
+    hls?.detachMedia();
+    hls?.destroy();
 }
 
 onMounted(initPlayer)
