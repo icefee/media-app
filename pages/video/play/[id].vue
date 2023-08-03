@@ -6,7 +6,7 @@
         <div class="flex flex-col sm:block max-w-5xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
             v-if="data">
             <div :style="{
-                height: 'min(calc(min(100vw, 1200px) * 10 / 16), 600px)'
+                height: 'clamp(45%, calc(min(100vw, 1024px) * 10 / 16), 500px)'
             }" class="max-h-screen grow-0 shrink-0">
                 <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" hls @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
