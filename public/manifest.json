@@ -1,6 +1,6 @@
 {
-    "name": "音乐/影视搜索",
-    "short_name": "音乐/影视搜索",
+    "name": "音乐·影视搜索",
+    "short_name": "音乐·影视搜索",
     "start_url": "/?mode=pwa",
     "background_color": "#a78bfa",
     "theme_color": "#c084fc",
