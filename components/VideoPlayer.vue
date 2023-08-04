@@ -10,11 +10,9 @@ import Hls from 'hls.js'
 const props = withDefaults(defineProps<{
     url: string;
     autoplay?: boolean;
-    hls?: boolean;
     initPlayTime?: number;
 }>(), {
     autoplay: false,
-    hls: false,
     initPlayTime: 0
 })
 
