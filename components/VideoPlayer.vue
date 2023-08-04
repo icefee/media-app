@@ -66,13 +66,15 @@ const initPlayer = () => {
 }
 
 const disposePlayer = () => {
+    hls.detachMedia()
     player.destroy(false)
 }
 
 onMounted(initPlayer)
 
 watch(() => props.url, () => {
-    player.switchUrl(props.url)
+    disposePlayer()
+    initPlayer()
 })
 
 onUnmounted(disposePlayer)
