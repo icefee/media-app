@@ -1,10 +1,10 @@
 <template>
-    <video class="block w-full h-full bg-black" ref="videoRef" controls @canplay="onCanPlay" @timeupdate="onTimeUpdate"
-        @ended="onEnded" />
+    <div class="block w-full h-full bg-black" ref="container" />
 </template>
 
 <script lang="ts" setup>
 import { shallowRef, onMounted, onUnmounted, watch } from 'vue'
+import Artplayer from 'artplayer'
 import Hls from 'hls.js'
 
 const props = withDefaults(defineProps<{
@@ -23,83 +23,59 @@ const emit = defineEmits<{
     (e: 'ended'): void;
 }>()
 
-const videoRef = shallowRef<HTMLVideoElement>()
-let hls: Hls | null = null
+const container = shallowRef<HTMLDivElement>()
 
-const canPlayEventFired = shallowRef(false)
-
-const onMainfestParsed = () => {
-    hls.startLoad(props.initPlayTime)
-}
-
-const onMediaAttached = () => {
-    tryToAutoPlay()
-}
-
-const tryToAutoPlay = async () => {
-    if (props.autoplay) {
-        try {
-            await videoRef.value.play()
-        }
-        catch (err) {
-            if (err.name === 'NotAllowedError') {
-                console.warn('auto play failed because of browser security policy')
-            }
-        }
-    }
-}
+let player: Artplayer | null = null;
+let hls: Hls | null = null;
 
 const initPlayer = () => {
-    const video = videoRef.value;
-    if (props.hls && Hls.isSupported()) {
-        if (!hls) {
-            hls = new Hls({
-                autoStartLoad: false
-            });
-            hls.attachMedia(video);
+    const { url, autoplay, initPlayTime } = props;
+    player = new Artplayer({
+        container: container.value,
+        autoplay,
+        theme: '#a78bfa',
+        pip: true,
+        fullscreen: true,
+        fullscreenWeb: true,
+        miniProgressBar: true,
+        url,
+        customType: {
+            m3u8(video: HTMLVideoElement, url: string) {
+                if (Hls.isSupported()) {
+                    hls = new Hls({
+                        autoStartLoad: false
+                    })
+                    hls.loadSource(url)
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        hls.startLoad(initPlayTime)
+                    })
+                    hls.attachMedia(video)
+                } else {
+                    const canPlay = video.canPlayType(
+                        'application/vnd.apple.mpegurl'
+                    )
+                    if (canPlay === 'probably' || canPlay == 'maybe') {
+                        video.src = url;
+                    } else {
+                        player.notice.show = '不支持的播放格式'
+                    }
+                }
+            }
         }
-        hls.on(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
-        hls.on(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
-        hls.loadSource(props.url);
-    }
-    else {
-        video.src = props.url;
-        video.load();
-    }
-}
-
-const fastSeek = (time: number) => {
-    videoRef.value.currentTime = time;
-}
-
-const onCanPlay = () => {
-    if (!hls && !canPlayEventFired.value) {
-        if (props.initPlayTime > 0) {
-            fastSeek(props.initPlayTime)
-        }
-        tryToAutoPlay()
-    }
-    canPlayEventFired.value = true
-}
-
-const onTimeUpdate = () => {
-    emit('timeupdate', videoRef.value.currentTime)
-}
-
-const onEnded = () => {
-    emit('ended')
+    })
+    player.on('video:timeupdate', () => emit('timeupdate', player.currentTime))
+    player.on('video:ended', () => emit('ended'))
 }
 
 const disposePlayer = () => {
-    hls.off(Hls.Events.MANIFEST_PARSED, onMainfestParsed);
-    hls.off(Hls.Events.MEDIA_ATTACHED, onMediaAttached);
-    hls?.detachMedia();
-    hls?.destroy();
+    player.destroy(false)
 }
 
 onMounted(initPlayer)
 
-watch(() => props.url, initPlayer)
+watch(() => props.url, () => {
+    player.switchUrl(props.url)
+})
 
 onUnmounted(disposePlayer)
 </script>

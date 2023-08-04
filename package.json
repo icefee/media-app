@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
+    "artplayer": "^5.0.9",
     "hls.js": "^1.4.4",
     "node-fetch": "^3.3.1"
   }

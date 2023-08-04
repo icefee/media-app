@@ -1396,6 +1396,13 @@ argparse@^2.0.1:
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
 
+artplayer@^5.0.9:
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/artplayer/-/artplayer-5.0.9.tgz#bb1a5d3fd9b28aef94b8a0de679332a9520f805b"
+  integrity sha512-IM/DShYdmKFEA9jl08LYbTK2Jfz9s7qIjEH0xWjnxvVArUKZZKcoqwr6i54U0c4grtc/Uvb4wtCd78kvtSVlgw==
+  dependencies:
+    option-validator "^2.0.6"
+
 ast-walker-scope@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/ast-walker-scope/-/ast-walker-scope-0.4.1.tgz#81ae35fc86f357689dae5a4721d743831e3c240e"
@@ -3163,6 +3170,11 @@ keygrip@~1.1.0:
   dependencies:
     tsscmp "1.0.6"
 
+kind-of@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
+  integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
+
 kleur@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
@@ -3972,6 +3984,13 @@ openapi-typescript@^6.2.4:
     supports-color "^9.3.1"
     undici "^5.22.1"
     yargs-parser "^21.1.1"
+
+option-validator@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/option-validator/-/option-validator-2.0.6.tgz#a314dae65e26db5f948ef0ff96fc88f18bb76ed6"
+  integrity sha512-tmZDan2LRIRQyhUGvkff68/O0R8UmF+Btmiiz0SmSw2ng3CfPZB9wJlIjHpe/MKUZqyIZkVIXCrwr1tIN+0Dzg==
+  dependencies:
+    kind-of "^6.0.3"
 
 ora@^5.4.1:
   version "5.4.1"

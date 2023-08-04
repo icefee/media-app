@@ -2,7 +2,8 @@
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中' }}</Title>
     </Head>
-    <div class="bg-gradient-to-tr from-purple-300 to-pink-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
+    <div
+        class="bg-gradient-to-tr from-indigo-200 to-violet-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
         <div class="flex flex-col sm:block max-w-5xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
             v-if="data">
             <div :style="{
