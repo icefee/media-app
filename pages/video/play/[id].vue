@@ -5,7 +5,7 @@
     <div
         class="bg-gradient-to-tr from-indigo-200 to-violet-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
         <div class="flex flex-col sm:block max-w-5xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
-            v-if="false">
+            v-if="videoData">
             <div :style="{
                 height: 'clamp(45%, calc(min(100vw, 1024px) * 10 / 16), 500px)'
             }" class="max-h-screen grow-0 shrink-0">
