@@ -1,4 +1,4 @@
-import { shallowRef, watch, computed, h as createElement } from 'vue';
+import { shallowRef, watch, computed, onBeforeMount, h as createElement } from 'vue';
 import type { MediaRefType } from './useMediaPlayState';
 import useAudioContext from './useAudioContext';
 import useResizeObserver from './useResizeObserver';
@@ -23,13 +23,13 @@ export function useAudioVisual(
     colors = ['#ff0000a0', '#ffff00a0', '#00ffffa0']
 ) {
 
-    const dpr = window.devicePixelRatio;
+    let dpr = 1;
     const barWidth = 4 * dpr;
     const barSpace = 1 * dpr;
     const capHeight = 2;
     const capGap = 2;
 
-    const caps = shallowRef<number[]>()
+    let caps: number[] = null;
 
     const { byteFrequency } = useAudioContext(audio, fftSize)
 
@@ -58,11 +58,11 @@ export function useAudioVisual(
             (barWidth + barSpace) * fftSize / width
         );
         const steps = Math.floor(fftSize / step);
-        if (!caps.value || caps.value && caps.value.length !== steps) {
-            caps.value = Array.from({ length: steps }, _ => 0)
+        if (!caps || caps && caps.length !== steps) {
+            caps = Array.from({ length: steps }, _ => 0)
         }
         else {
-            caps.value = caps.value.map(
+            caps = caps.map(
                 v => v > 0 ? v - 1 : v
             )
         }
@@ -72,14 +72,18 @@ export function useAudioVisual(
                     (prev, current) => prev + current,
                     0
                 ) / step)
-            if (intensity > caps.value[i]) {
-                caps.value[i] = intensity;
+            if (intensity > caps[i]) {
+                caps[i] = intensity;
             }
             const x = i * (barWidth + barSpace) + barSpace / 2;
             ctx.fillRect(x, height - intensity * height / 255, barWidth, intensity * height / 255);
-            ctx.fillRect(x, height - caps.value[i] * height / 255 - capHeight - capGap, barWidth, capHeight);
+            ctx.fillRect(x, height - caps[i] * height / 255 - capHeight - capGap, barWidth, capHeight);
         }
     }
+
+    onBeforeMount(() => {
+        dpr = window.devicePixelRatio
+    })
 
     watch(
         [byteFrequency],

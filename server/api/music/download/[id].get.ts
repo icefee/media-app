@@ -8,7 +8,7 @@ export default defineEventHandler(
         const url = await adaptor.parseMusicUrl(id);
         const response = await getResponse(url!);
         const headers = response.headers;
-        const contentType = headers.get('Content-Type');
+        const contentType = headers.get('content-type');
         if (contentType && contentType.match(/text\/html/)) {
             setResponseStatus(event, 200)
             return {
@@ -23,7 +23,7 @@ export default defineEventHandler(
             }
             const { name } = getQuery(event);
             if (name) {
-                setHeader(event, 'Content-Disposition', `attachment; filename* = UTF-8''${encodeURIComponent(name as string)}.mp3`)
+                setHeader(event, 'content-disposition', `attachment; filename* = utf-8''${encodeURIComponent(name as string)}.mp3`)
             }
             const arrayBuffer = await response.arrayBuffer()
             return sendStream(event, Readable.from(Buffer.from(arrayBuffer)))

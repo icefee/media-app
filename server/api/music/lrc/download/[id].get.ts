@@ -7,7 +7,7 @@ export default defineEventHandler(
         const adaptor = createApiAdaptor(key)!;
         const { name } = getQuery(event);
         if (name) {
-            setHeader(event, 'Content-Disposition', `attachment; filename* = UTF-8''${encodeURIComponent(name as string)}.lrc`);
+            setHeader(event, 'Content-Disposition', `attachment; filename* = utf-8''${encodeURIComponent(name as string)}.lrc`);
         }
         if (adaptor.lrcFile) {
             const response = await getResponse(adaptor.getLrcUrl(id));
@@ -21,7 +21,7 @@ export default defineEventHandler(
         else {
             const lrcText = await adaptor.getLrcText(id)
             if (lrcText) {
-                setHeader(event, 'Content-Type', 'text/lrc')
+                setHeader(event, 'content-type', 'text/lrc')
                 send(event, lrcText)
             }
             else {
