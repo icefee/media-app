@@ -75,11 +75,9 @@
         <div class="flex grow justify-center items-center" v-else-if="!loading">
             <p class="opacity-50">🔍输入关键词开始搜索</p>
         </div>
-        <div class="absolute w-0 h-0 overflow-hidden -z-50">
-            <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
-                :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" @durationchange="onDurationChange"
-                @timeupdate="onTimeUpdate" @error="onError" loop />
-        </div>
+        <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
+            :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" @durationchange="onDurationChange"
+            @timeupdate="onTimeUpdate" @error="onError" loop />
     </div>
 </template>
 
