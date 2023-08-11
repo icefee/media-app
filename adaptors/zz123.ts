@@ -102,8 +102,8 @@ export async function parseMusicUrl(id: string) {
             const response = await getResponse(fullUrl, {
                 redirect: 'manual'
             })
-            const audioUrl = response.headers.get('location');
-            return utf82utf16(decodeURI(audioUrl));
+            const audioUrl = response.headers.get('location')
+            return encodeURI(utf82utf16(decodeURI(audioUrl)))
         }
         return fullUrl;
     }

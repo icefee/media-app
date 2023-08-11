@@ -1,10 +1,10 @@
-import { createApiAdaptor, parseId } from '~/adaptors';
+import { createApiAdaptor, parseId } from '~/adaptors'
 
 export default defineEventHandler(
     async (event) => {
-        const { key, id } = parseId(event.context.params!.id);
-        const adaptor = createApiAdaptor(key)!;
-        const url = await adaptor.parseMusicUrl(id);
+        const { key, id } = parseId(event.context.params!.id)
+        const adaptor = createApiAdaptor(key)!
+        const url = await adaptor.parseMusicUrl(id)
         if (url) {
             return sendRedirect(event, url, 301)
         }
