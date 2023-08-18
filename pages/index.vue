@@ -8,7 +8,7 @@
                 'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
             }">
             <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
-                <USelectMenu v-model="searchType" size="lg" :options="searchTypes" :uiMenu="{
+                <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" :uiMenu="{
                     wrapper: 'relative shrink-0'
                 }">
                     <template #label>
@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, shallowRef, nextTick, watch } from 'vue'
+import { ref, reactive, shallowRef, nextTick, watch, onMounted } from 'vue'
 import Clue from '~/util/clue'
 
 const keyword = ref('')
@@ -136,6 +136,10 @@ useLoading(loading)
 
 const toast = useToast()
 
+onMounted(() => {
+    keyword.value = inputRef.value?.input.value
+})
+
 const clearInput = () => {
     keyword.value = ''
     inputRef.value?.input.focus()
@@ -149,39 +153,35 @@ const showError = (errText: string) => {
     })
 }
 
-const getData = async (s: string) => {
+const getSearch = async <T = unknown>(url: string, query?: Record<string, string>) => {
+    const searchParams = new URLSearchParams(query)
+    const { code, data, msg } = await $fetch<ApiJsonType<T>>(
+        `${url}?${searchParams}`
+    )
+    if (code === 0) {
+        return data
+    }
+    else {
+        throw new Error(msg)
+    }
+}
 
-    const searchParams = new URLSearchParams({
-        s
-    })
+const getData = async (s: string) => {
     try {
+        const query = {
+            s
+        }
         if (searchType.value.type === SearchType.music) {
-            const { code, data, msg } = await $fetch<ApiJsonType<SearchMusic[]>>(
-                `/api/music/list?${searchParams}`
-            )
-            if (code === 0) {
-                searchMusicResult.value = data
-                searchComplete.value = true
-                lastSearchType.value = SearchType.music
-                playingMusic.value = null
-            }
-            else {
-                throw new Error(msg)
-            }
+            const data = await getSearch<SearchMusic[]>('/api/music/list', query)
+            searchMusicResult.value = data
+            playingMusic.value = null
         }
         else {
-            const { code, data, msg } = await $fetch<ApiJsonType<SearchVideo[]>>(
-                `/api/video/list?${searchParams}`
-            )
-            if (code === 0) {
-                searchVideoResult.value = data
-                searchComplete.value = true
-                lastSearchType.value = SearchType.video
-            }
-            else {
-                throw new Error(msg)
-            }
+            const data = await getSearch<SearchVideo[]>('/api/video/list', query)
+            searchVideoResult.value = data
         }
+        lastSearchType.value = searchType.value.type
+        searchComplete.value = true
     }
     catch (err) {
         showError(`[错误]${String(err)}`)
