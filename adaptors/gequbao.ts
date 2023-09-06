@@ -1,4 +1,4 @@
-import { getTextWithTimeout, parseDuration, isTextNotNull } from './common';
+import { getTextWithTimeout, parseLrcText } from './common';
 import { timeFormatter } from '~/util/date';
 
 export const key = 'g';
@@ -63,7 +63,7 @@ export async function parseMusicUrl(id: string) {
         const matchBlock = html.match(
             /const url = 'https?:\/\/[^']+'/
         )
-        return matchBlock[0].match(/https?:\/\/[^']+/)[0];
+        return matchBlock[0].match(/https?:\/\/[^']+/)[0]
     }
     catch (err) {
         return null
@@ -72,25 +72,12 @@ export async function parseMusicUrl(id: string) {
 
 export async function parseLrc(id: string) {
     try {
-        const lrc = await getTextWithTimeout(`${baseUrl}/download/lrc/${id}`)
-        const lines = lrc.split(/\n/).filter(
-            line => isTextNotNull(line)
-        ).map(
-            line => {
-                const timeMatch = line.match(/\d{1,2}:\d{1,2}\.\d*/)
-                const textMatch = line.match(/(?<=]).+(?=($|\r))/)
-                return {
-                    time: parseDuration(timeMatch[0]),
-                    text: textMatch ? textMatch[0] : ''
-                }
-            }
-        ).filter(
-            ({ text }) => isTextNotNull(text)
-        )
-        return lines;
+        const lrc = await getTextWithTimeout(getLrcUrl(id))
+        const lines = parseLrcText(lrc)
+        return lines
     }
     catch (err) {
-        return null;
+        return null
     }
 }
 
