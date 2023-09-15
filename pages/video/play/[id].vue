@@ -9,21 +9,21 @@
             <div :style="{
                 height: 'clamp(45%, calc(min(100vw, 1152px) * .75), 600px)'
             }" class="max-h-screen grow-0 shrink-0">
-                <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" hls @timeupdate="onTimeUpdate"
+                <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
             </div>
-            <div class="p-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
+            <div class="px-2 pt-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
                 <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
                     wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
                     container: 'relative grow-1 overflow-y-auto'
                 }">
                     <template #profile>
-                        <div class="flex space-x-2">
+                        <div class="flex space-x-2 pb-5">
                             <div class="w-40 h-60 flex-shrink-0">
-                                <ThumbLoader :src="videoData.pic" />
+                                <ThumbLoader :src="videoData.pic" :alt="videoData.name" />
                             </div>
                             <div class="grow">
                                 <h4 class="text-2xl">{{ videoData.name }}</h4>
@@ -39,7 +39,7 @@
                         </div>
                     </template>
                     <template #series>
-                        <div class="p-2" :style="{ minHeight: '250px' }">
+                        <div class="pb-5 min-h-[250px]">
                             <div class="flex flex-wrap">
                                 <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
                                     v-for="video, index in videoData.dataList[0].urls" :key="index">

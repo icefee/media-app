@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute flex justify-center items-center inset-0 z-20" :class="{
+    <div class="absolute flex justify-center items-center inset-0 z-[100]" :class="{
         'bg-black/25': backdrop
     }">
         <div class="flex items-center rounded p-3 space-x-2 bg-black/75 text-white">
