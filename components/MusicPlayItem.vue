@@ -2,15 +2,16 @@
     <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
             <div class="relative flex items-center shrink-0">
-                <UAvatar :class="{
-                    'opacity-75': current,
-                    'animate-spin': current
-                }" :style="{ animationDuration: '12s', animationPlayState: playState.playing ? 'running' : 'paused' }"
-                    :src="music.poster" size="xl" />
-                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" v-if="current">
+                <div class="rounded-md w-14 md:w-16 shadow-md overflow-hidden" :class="{
+                    'opacity-70': !isMediaReady
+                }">
+                    <img class="block max-w-full" :src="music.poster" />
+                </div>
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
+                    v-if="current && isMediaReady">
                     <MusicPlaying :animating="playState.playing" />
                 </div>
-                <div class="absolute inset-0 scale-110" v-if="current && !isMediaReady && !error">
+                <div class="absolute inset-0" v-if="current && !isMediaReady && !error">
                     <Spinner class="text-primary-500 dark:text-primary-400" fill />
                 </div>
             </div>

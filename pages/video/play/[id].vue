@@ -7,7 +7,7 @@
         <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
             v-if="videoData">
             <div :style="{
-                height: 'clamp(45%, calc(min(100vw, 1152px) * .75), 600px)'
+                height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
             }" class="max-h-screen grow-0 shrink-0">
                 <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" @timeupdate="onTimeUpdate"
                     @ended="onEnded" />
@@ -18,15 +18,16 @@
             <div class="px-2 pt-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
                 <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
                     wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
-                    container: 'relative grow-1 overflow-y-auto'
+                    container: 'relative grow-1 overflow-hidden',
+                    base: 'h-full sm:h-auto'
                 }">
                     <template #profile>
-                        <div class="flex space-x-2 pb-5">
+                        <div class="flex space-x-2 h-full">
                             <div class="w-40 h-60 flex-shrink-0">
                                 <ThumbLoader :src="videoData.pic" :alt="videoData.name" />
                             </div>
-                            <div class="grow">
-                                <h4 class="text-2xl">{{ videoData.name }}</h4>
+                            <div class="grow pb-5 overflow-y-auto">
+                                <h4 class="text-2xl text-primary">{{ videoData.name }}</h4>
                                 <p class="mb-2">{{ videoData.note }}</p>
                                 <p v-if="videoData.subname">又名: {{ videoData.subname }}</p>
                                 <p>类别: {{ videoData.type }}</p>
@@ -39,12 +40,14 @@
                         </div>
                     </template>
                     <template #series>
-                        <div class="pb-5 min-h-[250px]">
-                            <div class="flex flex-wrap">
-                                <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
-                                    v-for="video, index in videoData.dataList[0].urls" :key="index">
-                                    <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md" variant="solid"
-                                        block @click="updateEpisode(index)">{{ video.label }}</UButton>
+                        <div class="h-full overflow-y-auto">
+                            <div class="pb-5 min-h-[250px]">
+                                <div class="flex flex-wrap">
+                                    <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
+                                        v-for="video, index in videoData.dataList[0].urls" :key="index">
+                                        <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md"
+                                            variant="solid" block @click="updateEpisode(index)">{{ video.label }}</UButton>
+                                    </div>
                                 </div>
                             </div>
                         </div>
