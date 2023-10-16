@@ -2,17 +2,21 @@
     <div class="absolute flex justify-center items-center inset-0 z-[100]" :class="{
         'bg-black/25': backdrop
     }">
-        <div class="flex items-center rounded p-3 space-x-4 bg-black/75 text-white">
+        <div class="flex items-center p-3 space-x-4 text-white" :class="[background && 'rounded bg-black/75']">
             <Spinner class="text-4xl text-primary-500 dark:text-primary-400" />
-            <span>加载中..</span>
+            <span>{{ text }}</span>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 withDefaults(defineProps<{
-    backdrop?: boolean
+    backdrop?: boolean;
+    background?: boolean;
+    text?: string;
 }>(), {
-    backdrop: true
+    backdrop: true,
+    background: true,
+    text: '加载中..'
 })
 </script>

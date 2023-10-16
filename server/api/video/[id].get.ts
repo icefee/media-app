@@ -1,6 +1,7 @@
-import { getJson } from '~/adaptors';
-import { Api } from '~/util/config';
-import Clue from '~/util/clue';
+import { getJson } from '~/adaptors'
+import { Api } from '~/util/config'
+import { Clue } from '~/util/clue'
+import { proxyUrl } from '~/util/proxy'
 
 const getVideoData = async (url: string) => {
     try {
@@ -20,7 +21,7 @@ export default defineEventHandler(
         const apiUrl = `${Api.site}/api/video/${api}/${id}`;
         const data = await getVideoData(apiUrl);
         if (type === 'poster') {
-            return sendRedirect(event, data ? data.pic : `/image_fail.jpg`, 301)
+            return sendRedirect(event, data ? data.proxy ? proxyUrl(data.pic) : data.pic : `/image_fail.jpg`, 301)
         }
         else {
             return data ? {

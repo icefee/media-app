@@ -8,9 +8,9 @@
             v-if="videoData">
             <div :style="{
                 height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
-            }" class="max-h-screen grow-0 shrink-0">
-                <VideoPlayer autoplay :url="playingVideo.url" :init-play-time="initPlayTime" @timeupdate="onTimeUpdate"
-                    @ended="onEnded" />
+            }" class="max-h-screen bg-black grow-0 shrink-0">
+                <iframe class="block w-full h-full border-none" :data-key="activeEpisode" :key="activeEpisode"
+                    :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="autoplay" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
@@ -23,8 +23,8 @@
                 }">
                     <template #profile>
                         <div class="flex space-x-2 h-full">
-                            <div class="w-40 h-60 flex-shrink-0">
-                                <ThumbLoader :src="videoData.pic" :alt="videoData.name" />
+                            <div class="w-32 h-48 flex-shrink-0">
+                                <ThumbLoader :src="posterUrl" :alt="videoData.name" />
                             </div>
                             <div class="grow pb-5 overflow-y-auto">
                                 <h4 class="text-2xl text-primary">{{ videoData.name }}</h4>
@@ -67,28 +67,26 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
+import { proxyUrl, proxyHlsUrl, getParamsUrl } from '~/util/proxy'
+import { Api } from '~/util/config'
 const route = useRoute()
 
 const activeSource = ref(0)
 const activeEpisode = ref(0)
 
-const initPlayTime = ref(0)
-
 interface CatchedParams {
     episode: number;
-    initPlayTime: number;
 }
 
 const videoId = <string>route.params.id;
 
 const getCatchedParams = (id: string) => {
     try {
-        const { episode, initPlayTime } = JSON.parse(
+        const { episode } = JSON.parse(
             localStorage.getItem(id)
         ) as CatchedParams
         return {
-            episode,
-            initPlayTime
+            episode
         }
     }
     catch (err) {
@@ -96,12 +94,8 @@ const getCatchedParams = (id: string) => {
     }
 }
 
-const setCatchedParams = (id: string, value: Partial<ReturnType<typeof getCatchedParams>>) => {
-    const params = getCatchedParams(id)
-    localStorage.setItem(id, JSON.stringify({
-        ...params,
-        ...value
-    }))
+const setCatchedParams = (id: string, value: CatchedParams) => {
+    localStorage.setItem(id, JSON.stringify(value))
 }
 
 const { data, error, execute, refresh } = await useFetch<ApiJsonType<VideoInfo>>(`/api/video/${videoId}`, {
@@ -112,25 +106,19 @@ const videoData = computed(() => data.value?.data)
 const playList = computed(() => videoData.value?.dataList[activeSource.value].urls)
 const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 
+const posterUrl = computed(() => videoData?.value.proxy ? proxyUrl(videoData.value.pic) : videoData.value.pic)
+
+const getPlayerUrl = (url: string, proxy: boolean) => {
+    return getParamsUrl(`${Api.assetSite}/video/player`, {
+        url: proxy ? proxyHlsUrl(url) : url
+    })
+}
+
 const updateEpisode = (index: number) => {
     activeEpisode.value = index;
-    initPlayTime.value = 0;
     setCatchedParams(videoId, {
         episode: index
     })
-}
-
-const onTimeUpdate = (playTime: number) => {
-    setCatchedParams(videoId, {
-        initPlayTime: playTime,
-        episode: activeEpisode.value
-    })
-}
-
-const onEnded = () => {
-    if (activeEpisode.value < playList.value.length - 1) {
-        updateEpisode(activeEpisode.value + 1)
-    }
 }
 
 onMounted(() => {
@@ -139,8 +127,7 @@ onMounted(() => {
 
     const params = getCatchedParams(videoId)
     if (params) {
-        activeEpisode.value = params.episode ?? 0;
-        initPlayTime.value = params.initPlayTime ?? 0;
+        activeEpisode.value = params.episode ?? 0
     }
 })
 </script>

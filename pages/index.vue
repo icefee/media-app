@@ -8,9 +8,7 @@
                 'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
             }">
             <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
-                <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" :uiMenu="{
-                    wrapper: 'relative shrink-0'
-                }">
+                <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" class="shrink-0">
                     <template #label>
                         <UIcon :name="searchType.icon" class="w-4 h-4" />
                         {{ searchType.label }}
@@ -83,7 +81,8 @@
 
 <script lang="ts" setup>
 import { ref, reactive, shallowRef, nextTick, watch, onMounted } from 'vue'
-import Clue from '~/util/clue'
+import { Clue } from '~/util/clue'
+import { getParamsUrl } from '~/util/proxy'
 
 const keyword = ref('')
 const loading = ref(false)
@@ -154,9 +153,8 @@ const showError = (errText: string) => {
 }
 
 const getSearch = async <T = unknown>(url: string, query?: Record<string, string>) => {
-    const searchParams = new URLSearchParams(query)
     const { code, data, msg } = await $fetch<ApiJsonType<T>>(
-        `${url}?${searchParams}`
+        getParamsUrl(url, query)
     )
     if (code === 0) {
         return data
