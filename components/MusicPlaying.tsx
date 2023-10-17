@@ -22,7 +22,7 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             justifyContent: 'space-between',
             alignItems: 'flex-end',
             fontSize,
-            '--bar-width': '15%'
+            '--bar-width': '12%'
         }}>
             <style type="text/css">
                 {
