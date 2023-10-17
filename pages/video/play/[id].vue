@@ -109,9 +109,13 @@ const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 const posterUrl = computed(() => videoData?.value.proxy ? proxyUrl(videoData.value.pic) : videoData.value.pic)
 
 const getPlayerUrl = (url: string, proxy: boolean) => {
-    return getParamsUrl(`${Api.assetSite}/video/player`, {
+    const params: Record<string, string> = {
         url: proxy ? proxyHlsUrl(url) : url
-    })
+    }
+    if (proxy) {
+        params.proxy = '1'
+    }
+    return getParamsUrl(`${Api.assetSite}/video/player`, params)
 }
 
 const updateEpisode = (index: number) => {
