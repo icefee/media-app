@@ -56,9 +56,9 @@
             </div>
         </div>
         <div class="flex h-full justify-center items-center" v-else-if="error">
-            <div class="flex flex-col justify-center items-center gap-4">
+            <div class="flex flex-col justify-center items-center gap-2">
                 <p>数据加载失败</p>
-                <UButton @click="refresh">重试</UButton>
+                <UButton @click="reloadData">重试</UButton>
             </div>
         </div>
         <LoadingOverlay :backdrop="false" v-else />
@@ -123,6 +123,11 @@ const updateEpisode = (index: number) => {
     setCatchedParams(videoId, {
         episode: index
     })
+}
+
+const reloadData = () => {
+    refresh()
+    error.value = null
 }
 
 onMounted(() => {
