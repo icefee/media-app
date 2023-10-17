@@ -2,8 +2,8 @@
     <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
             <div class="relative flex items-center shrink-0">
-                <div class="rounded-md w-14 md:w-16 shadow-md overflow-hidden" :class="{
-                    'opacity-70': !isMediaReady
+                <div class="rounded-md w-14 md:w-16 shadow-md flex-shrink-0 transition-opacity overflow-hidden" :class="{
+                    'opacity-70': current && playState.playing
                 }">
                     <img class="block max-w-full" :src="music.poster" />
                 </div>
@@ -19,12 +19,7 @@
         <div class="flex flex-col overflow-hidden grow" :class="{
             'justify-between': current
         }">
-            <div class="flex" :class="{
-                'gap-x-2': current,
-                'justify-around': !current,
-                'flex-col': !current,
-                'h-full': !current
-            }">
+            <div class="flex" :class="current ? 'gap-x-2' : 'h-full flex-col justify-around'">
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">{{ music.name }}</p>
                 <p class="opacity-70 text-sm" :class="{
                     'self-end': current

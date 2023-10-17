@@ -8,9 +8,7 @@
                 'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
             }">
             <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
-                <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" :uiMenu="{
-                    wrapper: 'relative shrink-0'
-                }">
+                <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" class="shrink-0">
                     <template #label>
                         <UIcon :name="searchType.icon" class="w-4 h-4" />
                         {{ searchType.label }}
