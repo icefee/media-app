@@ -6,7 +6,7 @@
                     'opacity-70': current,
                     'opacity-40': current && !isMediaReady
                 }">
-                    <img class="block max-w-full" :src="music.poster" />
+                    <img class="block max-w-full" :src="music.poster" @error="onPosterLoadError" />
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
                     v-if="current && isMediaReady">
@@ -44,6 +44,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { timeFormatter } from '~/util/date'
+import { defaultPoster } from '~/adaptors/common'
 
 interface PropsType {
     music: SearchMusic;
@@ -76,6 +77,10 @@ const durationText = computed(() => {
         isMediaReady.value ? playState.duration : 0
     ].map(timeFormatter).join(' / ')
 })
+
+const onPosterLoadError = (event: Event) => {
+    (event.target as HTMLImageElement).src = defaultPoster
+}
 
 const onRangeChange = (value: number) => emit('seek', value * playState.duration)
 </script>

@@ -10,7 +10,7 @@ export default defineEventHandler(
             if (poster) {
                 const response = await getResponse(poster, {
                     headers: {
-                        'Referer': adaptor.baseUrl
+                        'referer': adaptor.baseUrl
                     }
                 });
                 const headers = response.headers;
