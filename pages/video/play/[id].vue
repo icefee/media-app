@@ -12,7 +12,7 @@
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
                     'opacity-100': playerLoaded
                 }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)"
-                    allow="fullscreen autoplay" @load="playerLoaded = true" />
+                    allow="fullscreen autoplay" allowfullscreen @load="playerLoaded = true" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
