@@ -9,8 +9,10 @@
             <div :style="{
                 height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
             }" class="max-h-screen bg-black grow-0 shrink-0">
-                <iframe class="block w-full h-full border-none" :data-key="activeEpisode" :key="activeEpisode"
-                    :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="autoplay" />
+                <iframe class="block w-full h-full border-none opacity-0" :class="{
+                    'opacity-100': playerLoaded
+                }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)"
+                    allow="fullscreen autoplay" @load="playerLoaded = true" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
@@ -73,6 +75,7 @@ const route = useRoute()
 
 const activeSource = ref(0)
 const activeEpisode = ref(0)
+const playerLoaded = ref(false)
 
 interface CatchedParams {
     episode: number;
