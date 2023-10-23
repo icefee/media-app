@@ -8,11 +8,12 @@
             v-if="videoData">
             <div :style="{
                 height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
-            }" class="max-h-screen bg-black grow-0 shrink-0">
+            }" class="relative max-h-screen bg-black grow-0 shrink-0">
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
                     'opacity-100': playerLoaded
                 }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)"
-                    allow="fullscreen autoplay" allowfullscreen @load="playerLoaded = true" />
+                    allow="fullscreen; autoplay" @load="playerLoaded = true" />
+                <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
