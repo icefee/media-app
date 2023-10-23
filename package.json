@@ -12,10 +12,11 @@
   "devDependencies": {
     "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
     "@types/node": "^18",
-    "nuxt": "^3.7.4"
+    "nuxt": "^3.8.0"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "node-fetch": "^3.3.1"
-  }
+    "node-fetch": "^3.3.2"
+  },
+  "license": "MIT"
 }

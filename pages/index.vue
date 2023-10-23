@@ -34,12 +34,13 @@
             <template v-if="lastSearchType === SearchType.music">
                 <template v-if="searchMusicResult.length > 0">
                     <div class="w-full md:max-w-xl mx-auto">
-                        <div class="sticky top-0 p-3 backdrop-blur-sm rounded text-sm z-10">
+                        <div class="sticky top-0 h-10 leading-10 backdrop-blur-sm rounded text-sm z-10">
                             搜索到{{ searchMusicResult.length }}首歌曲</div>
                         <div class="space-y-2 pb-2 px-2">
-                            <MusicPlayItem v-for="music in searchMusicResult" :key="music.id" :music="music"
-                                :current="isActiveMusic(music)" :playState="playState" :error="hasError" @pause="pause"
-                                @play="play(music)" @seek="onSeek" />
+                            <MusicPlayItem v-for="music in searchMusicResult" :key="music.id" :class="[
+                                isActiveMusic(music) && 'sticky top-10'
+                            ]" :music="music" :current="isActiveMusic(music)" :playState="playState" :error="hasError"
+                                @pause="pause" @play="play(music)" @seek="onSeek" />
                         </div>
                     </div>
                 </template>
