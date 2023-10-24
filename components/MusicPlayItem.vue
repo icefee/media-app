@@ -1,5 +1,5 @@
 <template>
-    <MediaListItem :title="music.name" :subtitle="music.artist">
+    <MediaListItem :active="current">
         <template #leading>
             <div class="relative flex items-center shrink-0 rounded-md overflow-hidden bg-black">
                 <div class="w-14 h-14 md:w-16 md:h-16 shadow-md flex-shrink-0 transition-opacity" :class="{
