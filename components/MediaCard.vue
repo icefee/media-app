@@ -1,6 +1,6 @@
 <template>
     <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-md">
-        <div class="w-28 h-40">
+        <div class="w-28 h-40 flex-shrink-0">
             <ThumbLoader :src="src" />
         </div>
         <div class="flex flex-col space-y-2 grow p-2">
