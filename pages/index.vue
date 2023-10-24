@@ -38,7 +38,7 @@
                             搜索到{{ searchMusicResult.length }}首歌曲</div>
                         <div class="space-y-2 pb-2 px-2">
                             <MusicPlayItem v-for="music in searchMusicResult" :key="music.id" :class="[
-                                isActiveMusic(music) && 'sticky top-10'
+                                isActiveMusic(music) && 'sticky z-20 top-10 bottom-0 bg-indigo-300'
                             ]" :music="music" :current="isActiveMusic(music)" :playState="playState" :error="hasError"
                                 @pause="pause" @play="play(music)" @seek="onSeek" />
                         </div>
