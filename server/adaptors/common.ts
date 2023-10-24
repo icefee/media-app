@@ -1,8 +1,8 @@
-import fetch, { Response } from 'node-fetch';
-import AbortController from 'abort-controller';
+import fetch, { Response } from 'node-fetch'
+import AbortController from 'abort-controller'
 import { type Adaptor } from '.';
-import { isTextNotNull } from '~/util/string';
-export { isTextNotNull } from '~/util/string';
+import { isTextNotNull } from '~/util/string'
+export { isTextNotNull } from '~/util/string'
 
 export const defaultPoster = `/poster.jpg`
 

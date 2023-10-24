@@ -1,4 +1,4 @@
-import { createApiAdaptor, defaultPoster, parseId, getResponse } from '~/adaptors';
+import { createApiAdaptor, defaultPoster, parseId, getResponse } from '~/server/adaptors'
 import { Readable } from 'stream';
 
 export default defineEventHandler(
@@ -22,7 +22,7 @@ export default defineEventHandler(
                     setHeader(event, key, headers.get(key)!)
                 }
                 const arrayBuffer = await response.arrayBuffer()
-                return sendStream(event, Readable.from(Buffer.from(arrayBuffer)));
+                return sendStream(event, Readable.from(Buffer.from(arrayBuffer)))
             }
             else {
                 throw new Error('can not find poster')

@@ -6,7 +6,7 @@
                     'opacity-70': current,
                     'opacity-40': current && !isMediaReady
                 }">
-                    <img class="block max-w-full" :src="music.poster" @error="onPosterLoadError" />
+                    <ThumbLoader :src="music.poster" />
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
                     v-if="current && isMediaReady">
@@ -23,7 +23,7 @@
         }">
             <div class="flex" :class="current ? 'gap-x-2' : 'h-full flex-col justify-around'">
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">{{ music.name }}</p>
-                <p class="opacity-70 text-sm" :class="{
+                <p class="opacity-70 flex-shrink-0 text-sm" :class="{
                     'self-end': current
                 }">{{ music.artist }}</p>
             </div>
@@ -44,7 +44,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { timeFormatter } from '~/util/date'
-import { defaultPoster } from '~/adaptors/common'
 
 interface PropsType {
     music: SearchMusic;
@@ -77,10 +76,6 @@ const durationText = computed(() => {
         isMediaReady.value ? playState.duration : 0
     ].map(timeFormatter).join(' / ')
 })
-
-const onPosterLoadError = (event: Event) => {
-    (event.target as HTMLImageElement).src = defaultPoster
-}
 
 const onRangeChange = (value: number) => emit('seek', value * playState.duration)
 </script>

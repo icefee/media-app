@@ -1,5 +1,5 @@
-import { getJson } from '~/adaptors';
-import { Api } from '~/util/config';
+import { getJson } from '~/server/adaptors'
+import { Api } from '~/util/config'
 
 export default defineEventHandler(
     async (event) => {

@@ -1,4 +1,4 @@
-import { createApiAdaptor, parseId } from '~/adaptors'
+import { createApiAdaptor, parseId } from '~/server/adaptors'
 
 export default defineEventHandler(
     async (event) => {

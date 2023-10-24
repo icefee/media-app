@@ -1,13 +1,13 @@
-import { createApiAdaptor, parseId, getResponse } from '~/adaptors';
-import { Readable } from 'stream';
+import { createApiAdaptor, parseId, getResponse } from '~/server/adaptors'
+import { Readable } from 'stream'
 
 export default defineEventHandler(
     async (event) => {
-        const { key, id } = parseId(event.context.params!.id);
-        const adaptor = createApiAdaptor(key)!;
-        const { name } = getQuery(event);
+        const { key, id } = parseId(event.context.params!.id)
+        const adaptor = createApiAdaptor(key)!
+        const { name } = getQuery(event)
         if (name) {
-            setHeader(event, 'Content-Disposition', `attachment; filename* = utf-8''${encodeURIComponent(name as string)}.lrc`);
+            setHeader(event, 'content-disposition', `attachment; filename* = utf-8''${encodeURIComponent(name as string)}.lrc`)
         }
         if (adaptor.lrcFile) {
             const response = await getResponse(adaptor.getLrcUrl(id));
@@ -16,7 +16,7 @@ export default defineEventHandler(
                 setHeader(event, key, headers.get(key)!)
             }
             const arrayBuffer = await response.arrayBuffer()
-            return sendStream(event, Readable.from(Buffer.from(arrayBuffer)));
+            return sendStream(event, Readable.from(Buffer.from(arrayBuffer)))
         }
         else {
             const lrcText = await adaptor.getLrcText(id)

@@ -1,15 +1,15 @@
-import { createApiAdaptor, adaptors } from '~/adaptors';
+import { createApiAdaptor, adaptors } from '~/server/adaptors'
 
 export default defineEventHandler(
     async (event) => {
-        const { s } = getQuery(event);
-        const list: SearchMusic[] = [];
+        const { s } = getQuery(event)
+        const list: SearchMusic[] = []
 
         for (const k of adaptors) {
-            const adaptor = createApiAdaptor(k)!;
-            const result = await adaptor.getMusicSearch(s as string);
+            const adaptor = createApiAdaptor(k)!
+            const result = await adaptor.getMusicSearch(s as string)
             if (result) {
-                list.push(...result);
+                list.push(...result)
             }
         }
 

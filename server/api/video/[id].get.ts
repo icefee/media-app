@@ -1,15 +1,15 @@
-import { getJson } from '~/adaptors'
+import { getJson } from '~/server/adaptors'
 import { Api } from '~/util/config'
 import { Clue } from '~/util/clue'
 import { proxyUrl } from '~/util/proxy'
 
 const getVideoData = async (url: string) => {
     try {
-        const { data } = await getJson(url);
+        const { data } = await getJson(url)
         return data;
     }
     catch (err) {
-        return null;
+        return null
     }
 }
 
