@@ -90,6 +90,15 @@ const loading = ref(false)
 const searchComplete = ref(false)
 const hasError = ref(false)
 
+useHeadSafe({
+    meta: [
+        {
+            name: 'referrer',
+            content: 'no-referrer'
+        }
+    ]
+})
+
 usePwa()
 
 enum SearchType {
