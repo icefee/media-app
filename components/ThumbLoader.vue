@@ -11,10 +11,13 @@ import { ref, watch, onMounted, computed } from 'vue'
 const loading = ref(true)
 const failed = ref(false)
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     src: string;
     alt?: string;
-}>()
+    errorFallback?: string;
+}>(), {
+    errorFallback: '/image_fail.jpg'
+})
 
 function loadImage() {
     failed.value = false
@@ -30,7 +33,7 @@ function loadImage() {
 }
 
 const displayImageUrl = computed(
-    () => failed.value ? '/image_fail.jpg' : props.src
+    () => failed.value ? props.errorFallback : props.src
 )
 
 onMounted(loadImage)

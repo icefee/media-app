@@ -6,7 +6,7 @@
                     'opacity-70': current,
                     'opacity-40': current && !isMediaReady
                 }">
-                    <ThumbLoader :src="music.poster" />
+                    <ThumbLoader :src="music.poster" error-fallback="/poster.jpg" />
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
                     v-if="current && isMediaReady">
