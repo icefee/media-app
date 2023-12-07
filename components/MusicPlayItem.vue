@@ -1,20 +1,18 @@
 <template>
-    <MediaListItem :active="current">
+    <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
-            <div class="relative flex items-center shrink-0 rounded-md overflow-hidden bg-black">
-                <div class="w-14 h-14 md:w-16 md:h-16 shadow-md flex-shrink-0 transition-opacity" :class="{
-                    'opacity-70': current,
-                    'opacity-40': current && !isMediaReady
+            <div class="relative flex items-center shrink-0">
+                <div class="rounded-md w-14 md:w-16 shadow-md flex-shrink-0 transition-opacity overflow-hidden" :class="{
+                    'opacity-70': current && playState.playing
                 }">
-                    <ThumbLoader :src="music.poster" error-fallback="/poster.jpg" />
+                    <img class="block max-w-full" :src="music.poster" />
                 </div>
-                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
                     v-if="current && isMediaReady">
                     <MusicPlaying :animating="playState.playing" />
                 </div>
-                <div class="flex justify-center items-center text-3xl absolute inset-0"
-                    v-if="current && !isMediaReady && !error">
-                    <Spinner class="text-primary-500 dark:text-primary-400" />
+                <div class="absolute inset-0" v-if="current && !isMediaReady && !error">
+                    <Spinner class="text-primary-500 dark:text-primary-400" fill />
                 </div>
             </div>
         </template>
@@ -23,7 +21,7 @@
         }">
             <div class="flex" :class="current ? 'gap-x-2' : 'h-full flex-col justify-around'">
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">{{ music.name }}</p>
-                <p class="opacity-70 flex-shrink-0 text-sm" :class="{
+                <p class="opacity-70 text-sm" :class="{
                     'self-end': current
                 }">{{ music.artist }}</p>
             </div>

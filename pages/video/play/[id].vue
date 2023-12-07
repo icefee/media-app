@@ -134,6 +134,11 @@ const reloadData = () => {
     error.value = null
 }
 
+const reloadData = () => {
+    refresh()
+    error.value = null
+}
+
 onMounted(() => {
 
     execute()
