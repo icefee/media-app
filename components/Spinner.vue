@@ -1,9 +1,10 @@
 <template>
     <svg v-bind="attrs" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <defs>
-            <linearGradient :id="rndId" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#03a9f4" />
-                <stop offset="100%" stop-color="#e92929" />
+            <linearGradient :id="rndId" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#03a9f4" />
+                <stop offset="50%" stopColor="#ff7107" />
+                <stop offset="100%" stopColor="#e92929" />
             </linearGradient>
         </defs>
         <rect width="2.8" height="12" x="1" y="6" :fill="fillStyle">
