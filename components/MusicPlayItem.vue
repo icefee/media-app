@@ -9,10 +9,10 @@
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
                     v-if="current && isMediaReady">
-                    <MusicPlaying :animating="playState.playing" />
+                    <MusicPlaying font-size="24px" :animating="playState.playing" />
                 </div>
                 <div class="absolute inset-0" v-if="current && !isMediaReady && !error">
-                    <Spinner class="text-primary-500 dark:text-primary-400" fill />
+                    <Spinner class="text-primary-500 dark:text-primary-400" />
                 </div>
             </div>
         </template>
