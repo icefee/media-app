@@ -11,8 +11,8 @@
                     v-if="current && isMediaReady">
                     <MusicPlaying font-size="24px" :animating="playState.playing" />
                 </div>
-                <div class="absolute inset-0" v-if="current && !isMediaReady && !error">
-                    <Spinner class="text-primary-500 dark:text-primary-400" />
+                <div class="absolute justify-center items-center inset-0" v-if="current && !isMediaReady && !error">
+                    <Spinner class="text-primary-500 text-2xl dark:text-primary-400" />
                 </div>
             </div>
         </template>
