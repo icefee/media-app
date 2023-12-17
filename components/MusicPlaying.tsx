@@ -17,7 +17,6 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             width: '1em',
             height: '1em',
             aspectRatio: '1 / 1',
-            color: 'inherit',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-end',
@@ -39,13 +38,16 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             {
                 bars.map(
                     (delay, index) => (
-                        <div style={{
-                            width: 'var(--bar-width)',
-                            height: '100%',
-                            backgroundColor: 'currentcolor',
-                            animation: `.8s linear ${delay}s infinite alternate none scale-y`,
-                            animationPlayState: animating ? 'running' : 'paused'
-                        }} key={index} />
+                        <div
+                            style={{
+                                width: 'var(--bar-width)',
+                                height: '100%',
+                                backgroundImage: 'linear-gradient(to bottom, #a78bfa, #03a9f4)',
+                                animation: `.8s linear ${delay}s infinite alternate none scale-y`,
+                                animationPlayState: animating ? 'running' : 'paused'
+                            }}
+                            key={index}
+                        />
                     )
                 )
             }
