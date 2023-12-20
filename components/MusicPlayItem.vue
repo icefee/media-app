@@ -2,7 +2,7 @@
     <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
             <div class="relative flex items-center shrink-0">
-                <div class="rounded-md w-14 md:w-16 aspect-square shadow-md flex-grow-0 flex-shrink-0 transition-opacity overflow-hidden"
+                <div class="rounded-md w-14 h-14 md:w-16 md:h-16 shadow-md flex-grow-0 flex-shrink-0 transition-opacity overflow-hidden"
                     :class="{
                         'brightness-50': current
                     }">
