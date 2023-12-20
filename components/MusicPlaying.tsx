@@ -1,9 +1,9 @@
-interface MusicPlayProps {
+interface MusicPlayingProps {
     animating?: boolean;
     fontSize?: string;
 }
 
-function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
+function MusicPlaying({ animating = false, fontSize = '18px' }: MusicPlayingProps) {
 
     const bars = [
         .2,
@@ -54,4 +54,4 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
     )
 }
 
-export default MusicPlay;
+export default MusicPlaying;
