@@ -6,7 +6,7 @@ interface MusicPlayProps {
 function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
 
     const bars = [
-        .4,
+        .2,
         -.4,
         -.2,
         -.5
@@ -19,7 +19,6 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             aspectRatio: '1 / 1',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-end',
             fontSize,
             '--bar-width': '12%'
         }}>
@@ -27,10 +26,10 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
                 {
                     `@keyframes scale-y {
                         from {
-                            height: 100%;
+                            transform: scaleY(0);
                         }
                         to {
-                            height: 0;
+                            transform: scaleY(1);
                         }
                     }`
                 }
@@ -43,7 +42,7 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
                                 width: 'var(--bar-width)',
                                 height: '100%',
                                 backgroundImage: 'linear-gradient(to bottom, #a78bfa, #03a9f4)',
-                                animation: `.8s linear ${delay}s infinite alternate none scale-y`,
+                                animation: `.4s linear ${delay}s infinite alternate none scale-y`,
                                 animationPlayState: animating ? 'running' : 'paused'
                             }}
                             key={index}
