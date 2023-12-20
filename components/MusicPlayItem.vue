@@ -2,11 +2,11 @@
     <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
             <div class="relative flex items-center shrink-0">
-                <div class="rounded-md w-14 md:w-16 shadow-md flex-grow-0 flex-shrink-0 transition-opacity overflow-hidden"
+                <div class="rounded-md w-14 md:w-16 aspect-square shadow-md flex-grow-0 flex-shrink-0 transition-opacity overflow-hidden"
                     :class="{
                         'brightness-50': current
                     }">
-                    <img class="block max-w-full" :src="music.poster" />
+                    <img class="block max-w-full object-cover" :src="music.poster" @error="onImageLoadError" />
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
                     v-if="current && isMediaReady">
@@ -77,4 +77,9 @@ const durationText = computed(() => {
 })
 
 const onRangeChange = (value: number) => emit('seek', value * playState.duration)
+
+const onImageLoadError = (event: Event) => {
+    const image = event.target as HTMLImageElement
+    image.src = '/poster.jpg'
+}
 </script>
