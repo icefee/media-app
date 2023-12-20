@@ -1,12 +1,12 @@
-interface MusicPlayProps {
+interface MusicPlayingProps {
     animating?: boolean;
     fontSize?: string;
 }
 
-function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
+function MusicPlaying({ animating = false, fontSize = '18px' }: MusicPlayingProps) {
 
     const bars = [
-        .4,
+        .2,
         -.4,
         -.2,
         -.5
@@ -17,10 +17,8 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             width: '1em',
             height: '1em',
             aspectRatio: '1 / 1',
-            color: 'inherit',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-end',
             fontSize,
             '--bar-width': '12%'
         }}>
@@ -28,10 +26,10 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
                 {
                     `@keyframes scale-y {
                         from {
-                            height: 100%;
+                            transform: scaleY(0);
                         }
                         to {
-                            height: 0;
+                            transform: scaleY(1);
                         }
                     }`
                 }
@@ -39,13 +37,16 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
             {
                 bars.map(
                     (delay, index) => (
-                        <div style={{
-                            width: 'var(--bar-width)',
-                            height: '100%',
-                            backgroundColor: 'currentcolor',
-                            animation: `.8s linear ${delay}s infinite alternate none scale-y`,
-                            animationPlayState: animating ? 'running' : 'paused'
-                        }} key={index} />
+                        <div
+                            style={{
+                                width: 'var(--bar-width)',
+                                height: '100%',
+                                backgroundImage: 'linear-gradient(to bottom, #a78bfa, #03a9f4)',
+                                animation: `.4s linear ${delay}s infinite alternate none scale-y`,
+                                animationPlayState: animating ? 'running' : 'paused'
+                            }}
+                            key={index}
+                        />
                     )
                 )
             }
@@ -53,4 +54,4 @@ function MusicPlay({ animating = false, fontSize = '18px' }: MusicPlayProps) {
     )
 }
 
-export default MusicPlay;
+export default MusicPlaying;

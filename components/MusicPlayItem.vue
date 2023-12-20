@@ -2,16 +2,17 @@
     <MediaListItem :title="music.name" :subtitle="music.artist">
         <template #leading>
             <div class="relative flex items-center shrink-0">
-                <div class="rounded-md w-14 md:w-16 shadow-md flex-shrink-0 transition-opacity overflow-hidden" :class="{
-                    'opacity-70': current && playState.playing
-                }">
+                <div class="rounded-md w-14 md:w-16 shadow-md flex-grow-0 flex-shrink-0 transition-opacity overflow-hidden"
+                    :class="{
+                        'brightness-50': current
+                    }">
                     <img class="block max-w-full" :src="music.poster" />
                 </div>
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
                     v-if="current && isMediaReady">
-                    <MusicPlaying font-size="24px" :animating="playState.playing" />
+                    <MusicPlaying fontSize="24px" :animating="playState.playing" />
                 </div>
-                <div class="absolute justify-center items-center inset-0" v-if="current && !isMediaReady && !error">
+                <div class="absolute flex justify-center items-center inset-0" v-if="current && !isMediaReady && !error">
                     <Spinner class="text-primary-500 text-2xl dark:text-primary-400" />
                 </div>
             </div>

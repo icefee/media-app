@@ -1,6 +1,6 @@
 {
   "name": "media-app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -10,9 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/ui": "npm:@nuxt/ui-edge@latest",
+    "@nuxt/ui": "^2.11.1",
     "@types/node": "^18",
-    "nuxt": "^3.8.0"
+    "nuxt": "^3.8.2"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
