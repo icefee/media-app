@@ -1,10 +1,10 @@
 <template>
     <Head>
-        <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中' }}</Title>
+        <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中..' }}</Title>
     </Head>
     <div
         class="bg-gradient-to-tr from-indigo-200 to-violet-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
-        <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-md shadow-black sm:overflow-y-auto"
+        <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-lg shadow-black sm:overflow-y-auto"
             v-if="videoData">
             <div :style="{
                 height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
@@ -26,7 +26,7 @@
                 }">
                     <template #profile>
                         <div class="flex space-x-2 h-full">
-                            <div class="w-32 h-48 flex-shrink-0">
+                            <div class="w-32 sm:w-40 md:w-48 h-48 sm:h-60 md:h-72 flex-shrink-0">
                                 <ThumbLoader :src="posterUrl" :alt="videoData.name" />
                             </div>
                             <div class="grow pb-5 overflow-y-auto">
@@ -47,7 +47,7 @@
                             <div class="pb-5 min-h-[250px]">
                                 <div class="flex flex-wrap">
                                     <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
-                                        v-for="video, index in videoData.dataList[0].urls" :key="index">
+                                        v-for="video, index in playList" :key="index">
                                         <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md"
                                             variant="solid" block @click="updateEpisode(index)">{{ video.label }}</UButton>
                                     </div>
