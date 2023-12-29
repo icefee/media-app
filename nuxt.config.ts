@@ -5,5 +5,15 @@ export default defineNuxtConfig({
     },
     modules: [
         '@nuxt/ui'
-    ]
+    ],
+    app: {
+        head: {
+            link: [
+                {
+                    rel: 'stylesheet',
+                    href: '/global.css'
+                }
+            ]
+        }
+    }
 })
