@@ -83,3 +83,15 @@ export function parseLrcText(text: string) {
         (prev, next) => prev.time - next.time
     )
 }
+
+export function escapeSymbols(source: string) {
+    if (source) {
+        return source
+            .replace('&nbsp;', ' ')
+            .replace('&lt;', '<')
+            .replace('&gt;', '>')
+            .replace('&quot;', '"')
+            .replace('&amp;', '&')
+    }
+    return ''
+}
