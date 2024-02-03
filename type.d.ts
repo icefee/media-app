@@ -79,6 +79,11 @@ declare interface VideoInfo {
     dataList: VideoSource[];
 }
 
+declare enum SearchType {
+    music = 0,
+    video = 1
+}
+
 declare interface SearchMusic {
     id: string;
     name: string;

@@ -37,10 +37,15 @@
                         <div class="sticky top-0 h-10 leading-10 backdrop-blur-sm rounded text-sm pl-3 z-10">
                             搜索到{{ searchMusicResult.length }}首歌曲</div>
                         <div class="space-y-2 pb-2 px-2">
-                            <MusicPlayItem v-for="music in searchMusicResult" :key="music.id" :class="[
+                            <MusicPlayItem v-for="music in renderSongs" :key="music.id" :class="[
                                 isActiveMusic(music) && 'sticky z-20 top-10 bottom-0'
                             ]" :music="music" :current="isActiveMusic(music)" :playState="playState" :error="hasError"
                                 @pause="pause" @play="play(music)" @seek="onSeek" />
+                            <div class="text-center" v-if="songPages > 1">
+                                <UButton block variant="soft" v-if="songPage < songPages" @click="loadMoreSongs">加载更多
+                                </UButton>
+                                <span v-else>已加载全部</span>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -124,6 +129,12 @@ const searchType = ref(searchTypes[0])
 const lastSearchType = ref<SearchType>(SearchType.music)
 
 const searchMusicResult = ref<SearchMusic[]>([])
+const songPageSize = 20
+const songPage = ref(1)
+
+const songPages = computed(() => Math.ceil(searchMusicResult.value.length / songPageSize))
+
+const renderSongs = computed(() => searchMusicResult.value.slice(0, Math.min(songPage.value * songPageSize, searchMusicResult.value.length)))
 
 const inputRef = shallowRef<{
     input: HTMLInputElement;
@@ -182,6 +193,7 @@ const getData = async (s: string) => {
         if (searchType.value.type === SearchType.music) {
             const data = await getSearch<SearchMusic[]>('/api/music/list', query)
             searchMusicResult.value = data
+            songPage.value = 1
             playingMusic.value = null
         }
         else {
@@ -194,6 +206,10 @@ const getData = async (s: string) => {
     catch (err) {
         showError(`[错误]${String(err)}`)
     }
+}
+
+const loadMoreSongs = () => {
+    songPage.value += 1
 }
 
 const videoId = (...args: Parameters<typeof Clue.create>) => Clue.create(...args)
