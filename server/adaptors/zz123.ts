@@ -6,8 +6,6 @@ export const key = 'z';
 
 export const baseUrl = 'https://zz123.com';
 
-export const lrcFile = false;
-
 export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
     const searchParams = new URLSearchParams({
         key: s

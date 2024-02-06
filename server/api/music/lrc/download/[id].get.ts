@@ -1,5 +1,4 @@
-import { createApiAdaptor, parseId, getResponse } from '~/server/adaptors'
-import { Readable } from 'stream'
+import { createApiAdaptor, parseId } from '~/server/adaptors'
 
 export default defineEventHandler(
     async (event) => {
@@ -9,27 +8,16 @@ export default defineEventHandler(
         if (name) {
             setHeader(event, 'content-disposition', `attachment; filename* = utf-8''${encodeURIComponent(name as string)}.lrc`)
         }
-        if (adaptor.lrcFile) {
-            const response = await getResponse(adaptor.getLrcUrl(id));
-            const headers = response.headers;
-            for (const key of headers.keys()) {
-                setHeader(event, key, headers.get(key)!)
-            }
-            const arrayBuffer = await response.arrayBuffer()
-            return sendStream(event, Readable.from(Buffer.from(arrayBuffer)))
+        const lrcText = await adaptor.getLrcText(id)
+        if (lrcText) {
+            setHeader(event, 'content-type', 'text/lrc')
+            send(event, lrcText)
         }
         else {
-            const lrcText = await adaptor.getLrcText(id)
-            if (lrcText) {
-                setHeader(event, 'content-type', 'text/lrc')
-                send(event, lrcText)
-            }
-            else {
-                return {
-                    code: -1,
-                    data: null,
-                    msg: 'lrc file not found.'
-                }
+            return {
+                code: -1,
+                data: null,
+                msg: 'lrc file not found.'
             }
         }
     }
