@@ -2,7 +2,7 @@ import fetch, { Response } from 'node-fetch'
 import AbortController from 'abort-controller'
 import { type Adaptor } from '.';
 import { isTextNotNull } from '~/util/string'
-export { isTextNotNull } from '~/util/string'
+export { isTextNotNull, escapeSymbols } from '~/util/string'
 
 export const defaultPoster = `/poster.jpg`
 
@@ -82,17 +82,4 @@ export function parseLrcText(text: string) {
     return lrcs.sort(
         (prev, next) => prev.time - next.time
     )
-}
-
-export function escapeSymbols(source: string) {
-    if (source) {
-        return source
-            .replaceAll('&nbsp;', ' ')
-            .replaceAll('&lt;', '<')
-            .replaceAll('&gt;', '>')
-            .replaceAll('&quot;', '"')
-            .replaceAll('&apos;', '\'')
-            .replaceAll('&amp;', '&')
-    }
-    return ''
 }
