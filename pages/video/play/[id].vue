@@ -25,7 +25,7 @@
                     base: 'h-full sm:h-auto'
                 }">
                     <template #profile>
-                        <div class="flex space-x-2 h-full">
+                        <div class="flex space-x-2 pb-4 h-full">
                             <div class="w-32 sm:w-40 md:w-48 h-48 sm:h-60 md:h-72 flex-shrink-0">
                                 <ThumbLoader :src="posterUrl" :alt="videoData.name" />
                             </div>
