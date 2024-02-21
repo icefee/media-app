@@ -21,7 +21,7 @@ export default defineEventHandler(
         const apiUrl = `${Api.site}/api/video/${api}/${id}`;
         const data = await getVideoData(apiUrl);
         if (type === 'poster') {
-            return sendRedirect(event, data ? data.proxy ? proxyUrl(data.pic) : data.pic : `/image_fail.jpg`, 301)
+            return sendRedirect(event, data ? proxyUrl(data.pic) : `/image_fail.jpg`, 301)
         }
         else {
             return data ? {

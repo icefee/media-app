@@ -110,7 +110,7 @@ const videoData = computed(() => data.value?.data)
 const playList = computed(() => videoData.value?.dataList[activeSource.value].urls)
 const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 
-const posterUrl = computed(() => videoData?.value.proxy ? proxyUrl(videoData.value.pic) : videoData.value.pic)
+const posterUrl = computed(() => proxyUrl(videoData.value.pic))
 
 const getPlayerUrl = (url: string, proxy: boolean) => {
     const params: Record<string, string> = {
