@@ -1,4 +1,4 @@
-import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
+import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
 
 function useResizeObserver<T extends HTMLElement = HTMLDivElement>() {
 
@@ -10,12 +10,12 @@ function useResizeObserver<T extends HTMLElement = HTMLDivElement>() {
     })
 
     const onResize = () => {
-        const width = elm.value!.clientWidth;
-        const height = elm.value!.clientHeight;
+        const width = elm.value!.clientWidth
+        const height = elm.value!.clientHeight
         size.value = {
             width,
             height
-        };
+        }
     }
 
     onMounted(() => {

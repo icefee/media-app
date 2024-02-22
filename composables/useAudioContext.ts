@@ -1,6 +1,6 @@
-import { ref, onMounted, onUnmounted, watch } from 'vue';
-import useMediaPlayState, { MediaRefType } from './useMediaPlayState';
-import useRequestAnimationFrame from './useRequestAnimationFrame';
+import { ref, onUnmounted, watch, watchPostEffect } from 'vue'
+import useMediaPlayState, { type MediaRefType } from './useMediaPlayState'
+import useRequestAnimationFrame from './useRequestAnimationFrame'
 
 function useAudioContext(audio: MediaRefType, fftSize = 2048) {
     const { playing } = useMediaPlayState(audio)
@@ -22,34 +22,30 @@ function useAudioContext(audio: MediaRefType, fftSize = 2048) {
         analyser.disconnect()
     }
 
-    onMounted(() => {
-        audioContext = new AudioContext()
-        mediaSource = audioContext.createMediaElementSource(audio.value)
-        analyser = audioContext.createAnalyser()
-    })
-    onUnmounted(dispose)
-
-    watch(
-        [playing],
-        () => {
-            if (playing.value) {
-                analyser.fftSize = fftSize
+    watchPostEffect(() => {
+        if (playing.value) {
+            if (!audioContext) {
+                audioContext = new AudioContext()
+                mediaSource = audioContext.createMediaElementSource(audio.value)
+                analyser = audioContext.createAnalyser()
                 mediaSource.connect(analyser)
                 analyser.connect(audioContext.destination)
-                audioContext.resume()
             }
-            else {
-                dispose()
-            }
-        })
+            analyser.fftSize = fftSize
+            audioContext.resume()
+        }
+    })
+
+    onUnmounted(dispose)
 
     watch(
         [ts, playing],
         () => {
-            if (playing.value) {
+            if (audioContext && playing.value) {
                 startAnalyser()
             }
-        })
+        }
+    )
 
     return { byteFrequency }
 }

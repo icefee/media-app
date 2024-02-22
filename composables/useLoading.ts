@@ -1,4 +1,4 @@
-import { inject, watchEffect, Ref } from 'vue'
+import { inject, watchEffect, type Ref } from 'vue'
 import { provideLoading } from '~/util/keys'
 
 export function useLoading(bindValue?: Ref<boolean>) {
@@ -10,5 +10,8 @@ export function useLoading(bindValue?: Ref<boolean>) {
             }
         )
     }
-    return { showLoading, hideLoading };
+    return {
+        showLoading,
+        hideLoading
+    }
 }

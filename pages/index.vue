@@ -95,6 +95,8 @@ const loading = ref(false)
 const searchComplete = ref(false)
 const hasError = ref(false)
 
+const testAudio = shallowRef<HTMLAudioElement>()
+
 useHeadSafe({
     meta: [
         {

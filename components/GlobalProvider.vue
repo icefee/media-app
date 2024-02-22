@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts" setup>
-
 import { ref, provide } from 'vue'
 import { provideLoading } from '~/util/keys'
 
@@ -24,5 +23,4 @@ provide<LoadingModel>(provideLoading, {
     showLoading,
     hideLoading
 })
-
 </script>

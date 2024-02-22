@@ -1,32 +1,30 @@
-import { ref, Ref, ShallowRef, onUnmounted, watch } from 'vue';
+import { ref, onUnmounted, watchEffect, type Ref } from 'vue'
 
-export type MediaRefType = Ref<HTMLMediaElement> | ShallowRef<HTMLMediaElement>;
+export type MediaRefType = Ref<HTMLMediaElement | null>;
 
 function useMediaPlayState(media: MediaRefType) {
     const playing = ref(false)
     const onPlay = () => {
-        playing.value = true;
+        playing.value = true
     }
     const onPause = () => {
-        playing.value = false;
+        playing.value = false
     }
     const dispose = () => {
-        media.value.removeEventListener('play', onPlay)
-        media.value.removeEventListener('pause', onPause)
+        media.value?.removeEventListener('play', onPlay)
+        media.value?.removeEventListener('pause', onPause)
     }
-    watch(
-        [media],
-        () => {
-            if (media.value) {
-                media.value.addEventListener('play', onPlay)
-                media.value.addEventListener('pause', onPause)
-            }
-            else {
-                dispose()
-            }
-        })
+    watchEffect(
+        (onCleanup) => {
+            media.value?.addEventListener('play', onPlay)
+            media.value?.addEventListener('pause', onPause)
+            onCleanup(dispose)
+        }
+    )
     onUnmounted(dispose)
-    return { playing }
+    return {
+        playing
+    }
 }
 
 export default useMediaPlayState;

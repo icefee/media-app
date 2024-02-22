@@ -1,4 +1,3 @@
-
 interface SpinProps {
     size?: number;
 }

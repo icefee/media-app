@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue'
 
 function useRequestAnimationFrame() {
     const raf = ref<number | null>(null)
