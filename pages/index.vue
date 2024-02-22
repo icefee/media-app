@@ -32,70 +32,25 @@
         </div>
         <div class="h-full relative pt-16 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
-                <template v-if="searchMusicResult.length > 0">
-                    <div class="w-full md:max-w-xl mx-auto">
-                        <div class="sticky top-0 h-10 leading-10 backdrop-blur-sm rounded text-sm pl-3 z-10">
-                            搜索到{{ searchMusicResult.length }}首歌曲</div>
-                        <div class="space-y-2 pb-2 px-2">
-                            <MusicPlayItem v-for="music in renderSongs" :key="music.id" :class="[
-                                isActiveMusic(music) && 'sticky z-20 top-10 bottom-0'
-                            ]" :music="music" :current="isActiveMusic(music)" :playState="playState" :error="hasError"
-                                @pause="pause" @play="play(music)" @seek="onSeek" />
-                            <div class="text-center" v-if="songPages > 1">
-                                <UButton block variant="soft" v-if="songPage < songPages" @click="loadMoreSongs">加载更多
-                                </UButton>
-                                <span v-else>已加载全部</span>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else>
-                    <Overlay text="💔没有搜索到相关的音乐" />
-                </template>
+                <musit-list v-if="searchMusicResult.length > 0" :data="searchMusicResult" />
+                <Overlay v-else text="💔没有搜索到相关的音乐" />
             </template>
             <template v-else>
-                <template v-if="searchVideoResult.length > 0">
-                    <div class="mb-5" v-for="resultGroup in searchVideoResult" :key="resultGroup.key">
-                        <div class="sticky top-0 backdrop-blur-sm pl-4 py-3">
-                            <h4>{{ resultGroup.name }}</h4>
-                        </div>
-                        <div class="flex flex-wrap px-2">
-                            <div class="w-full p-2 sm:w-1/2 lg:w-1/3 xl:w-1/4" v-for="video in resultGroup.data"
-                                :key="video.id">
-                                <a class="block" :href="`/video/play/${videoId(resultGroup.key, video.id)}`"
-                                    target="_blank">
-                                    <MediaCard :src="'/api' + videoUrl(resultGroup.key, video.id) + '?type=poster'"
-                                        :title="video.name" :subtitle="video.note" :type="video.type" :tail="video.last" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else>
-                    <Overlay text="💔没有搜索到相关的影视" />
-                </template>
+                <video-list v-if="searchVideoResult.length > 0" :data="searchVideoResult" />
+                <Overlay v-else text="💔没有搜索到相关的影视" />
             </template>
         </div>
         <div class="flex grow justify-center items-center" v-else-if="!loading">
             <p class="opacity-50">🔍输入关键词开始搜索</p>
         </div>
-        <audio ref="audioRef" v-if="searchComplete && lastSearchType === SearchType.music && playingMusic"
-            :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause" @durationchange="onDurationChange"
-            @timeupdate="onTimeUpdate" @error="onError" loop />
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, shallowRef, nextTick, watch, onMounted } from 'vue'
-import { Clue } from '~/util/clue'
+import { ref, shallowRef, onMounted } from 'vue'
 import { getParamsUrl } from '~/util/proxy'
 
-const keyword = ref('')
-const loading = ref(false)
-const searchComplete = ref(false)
-const hasError = ref(false)
-
-const testAudio = shallowRef<HTMLAudioElement>()
+usePwa()
 
 useHeadSafe({
     meta: [
@@ -106,7 +61,11 @@ useHeadSafe({
     ]
 })
 
-usePwa()
+const { showError } = useMessage()
+
+const keyword = ref('')
+const loading = ref(false)
+const searchComplete = ref(false)
 
 enum SearchType {
     music = 0,
@@ -131,32 +90,16 @@ const searchType = ref(searchTypes[0])
 const lastSearchType = ref<SearchType>(SearchType.music)
 
 const searchMusicResult = ref<SearchMusic[]>([])
-const songPageSize = 20
-const songPage = ref(1)
-
-const songPages = computed(() => Math.ceil(searchMusicResult.value.length / songPageSize))
-
-const renderSongs = computed(() => searchMusicResult.value.slice(0, Math.min(songPage.value * songPageSize, searchMusicResult.value.length)))
 
 const inputRef = shallowRef<{
     input: HTMLInputElement;
 }>()
-
-const audioRef = shallowRef<HTMLAudioElement>()
-
-const playState = reactive<PlayState>({
-    playing: false,
-    duration: 0,
-    currentTime: 0
-})
 
 const playingMusic = ref<SearchMusic>()
 
 const searchVideoResult = ref<SearchVideo[]>([])
 
 useLoading(loading)
-
-const toast = useToast()
 
 onMounted(() => {
     keyword.value = inputRef.value?.input.value
@@ -165,14 +108,6 @@ onMounted(() => {
 const clearInput = () => {
     keyword.value = ''
     inputRef.value?.input.focus()
-}
-
-const showError = (errText: string) => {
-    toast.add({
-        color: 'red',
-        icon: 'i-heroicons-x-circle-20-solid',
-        title: errText
-    })
 }
 
 const getSearch = async <T = unknown>(url: string, query?: Record<string, string>) => {
@@ -195,7 +130,6 @@ const getData = async (s: string) => {
         if (searchType.value.type === SearchType.music) {
             const data = await getSearch<SearchMusic[]>('/api/music/list', query)
             searchMusicResult.value = data
-            songPage.value = 1
             playingMusic.value = null
         }
         else {
@@ -210,89 +144,11 @@ const getData = async (s: string) => {
     }
 }
 
-const loadMoreSongs = () => {
-    songPage.value += 1
-}
-
-const videoId = (...args: Parameters<typeof Clue.create>) => Clue.create(...args)
-
-const videoUrl = (...args: Parameters<typeof Clue.create>) => {
-    const sid = videoId(...args)
-    return `/video/${sid}`
-}
-
 const onSearch = async () => {
     if (!loading.value) {
         loading.value = true
         await getData(keyword.value)
         loading.value = false
     }
-}
-
-watch(playingMusic, () => {
-    hasError.value = false
-    playState.currentTime = 0
-    playState.duration = 0
-})
-
-const isActiveMusic = (music: SearchMusic) => {
-    return playingMusic.value !== null && playingMusic.value.id === music.id
-}
-
-const tryToPlay = async () => {
-    try {
-        await audioRef.value.play()
-    }
-    catch (err) {
-        console.warn(err)
-    }
-}
-
-const showPlayFailError = () => showError('播放出错, 当前歌曲无法播放')
-
-const play = async (music: SearchMusic) => {
-    if (!playingMusic.value || playingMusic.value && playingMusic.value.id !== music.id) {
-        audioRef.value?.pause()
-        playingMusic.value = music
-        await nextTick()
-        audioRef.value.load()
-    }
-    else if (hasError.value) {
-        showPlayFailError()
-        return;
-    }
-    await tryToPlay()
-}
-
-const onSeek = (time: number) => {
-    if (audioRef.value) {
-        audioRef.value.currentTime = time
-    }
-}
-
-const pause = async () => {
-    audioRef.value.pause()
-}
-
-const onPlay = () => {
-    playState.playing = true
-}
-
-const onPause = () => {
-    playState.playing = false
-}
-
-const onDurationChange = () => {
-    playState.duration = audioRef.value.duration
-}
-
-const onTimeUpdate = () => {
-    playState.currentTime = audioRef.value.currentTime
-}
-
-const onError = () => {
-    hasError.value = true
-    playState.playing = false
-    showPlayFailError()
 }
 </script>

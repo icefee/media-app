@@ -1,2 +1,1 @@
-
-export const provideLoading = '__provide__loading'
+export const provideLoading = Symbol('loading')

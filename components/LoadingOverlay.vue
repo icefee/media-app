@@ -2,9 +2,9 @@
     <div class="absolute flex justify-center items-center inset-0 z-[100]" :class="{
         'bg-black/25': backdrop
     }">
-        <div class="flex items-center p-3 space-x-4 text-white" :class="[background && 'rounded bg-black/75']">
+        <div class="flex items-center p-3 space-x-4" :class="[background && 'rounded bg-black/75']">
             <Spinner class="text-3xl text-primary-500 dark:text-primary-400" />
-            <span>{{ text }}</span>
+            <span class="bg-clip-text text-transparent bg-gradient-to-t from-cyan-300 to-purple-400">{{ text }}</span>
         </div>
     </div>
 </template>

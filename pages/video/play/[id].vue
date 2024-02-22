@@ -72,7 +72,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { proxyUrl, proxyHlsUrl, getParamsUrl } from '~/util/proxy'
 import { Api } from '~/util/config'
-const route = useRoute()
 
 const activeSource = ref(0)
 const activeEpisode = ref(0)
@@ -81,6 +80,8 @@ const playerLoaded = ref(false)
 interface CatchedParams {
     episode: number;
 }
+
+const route = useRoute()
 
 const videoId = <string>route.params.id;
 
