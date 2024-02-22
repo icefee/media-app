@@ -14,16 +14,16 @@
             </div>
         </div>
     </div>
-    <audio ref="audioRef" v-if="playingMusic" :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause"
+    <audio v-if="playingMusic" ref="audioRef" :src="playingMusic.url" preload="auto" @play="onPlay" @pause="onPause"
         @durationchange="onDurationChange" @timeupdate="onTimeUpdate" @error="onError" loop />
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 const { showError } = useMessage()
 
-const { data } = defineProps<{
+const props = defineProps<{
     data: SearchMusic[];
 }>()
 
@@ -31,9 +31,11 @@ const songPageSize = 20
 const songPage = ref(1)
 const hasError = ref(false)
 
-const songPages = computed(() => Math.ceil(data.length / songPageSize))
+const data = computed(() => props.data)
 
-const renderSongs = computed(() => data.slice(0, Math.min(songPage.value * songPageSize, data.length)))
+const songPages = computed(() => Math.ceil(data.value.length / songPageSize))
+
+const renderSongs = computed(() => data.value.slice(0, Math.min(songPage.value * songPageSize, props.data.length)))
 
 const playState = reactive<PlayState>({
     playing: false,
@@ -87,6 +89,11 @@ const onSeek = (time: number) => {
         audioRef.value.currentTime = time
     }
 }
+
+watch(data, () => {
+    playingMusic.value = null
+    songPage.value = 1
+})
 
 watch(playingMusic, () => {
     hasError.value = false

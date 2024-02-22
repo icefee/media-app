@@ -12,7 +12,7 @@
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
                     'opacity-100': playerLoaded
                 }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)"
-                    allow="fullscreen; autoplay" @load="playerLoaded = true" />
+                    allow="fullscreen; autoplay" @load="onPlayerLoaded" />
                 <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
@@ -112,6 +112,12 @@ const playList = computed(() => videoData.value?.dataList[activeSource.value].ur
 const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 
 const posterUrl = computed(() => proxyUrl(videoData.value.pic))
+
+const onPlayerLoaded = (event: Event) => {
+    const frame = event.target as HTMLIFrameElement
+    frame.focus()
+    playerLoaded.value = true
+}
 
 const getPlayerUrl = (url: string, proxy: boolean) => {
     const params: Record<string, string> = {

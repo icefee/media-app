@@ -7,7 +7,7 @@
             :class="{
                 'border-b': searchMusicResult.length > 0 || searchVideoResult.length > 0
             }">
-            <form class="flex w-full sm:w-auto" @submit.prevent="onSearch">
+            <form name="search" class="flex w-full sm:w-auto" @submit.prevent="onSearch">
                 <USelectMenu v-model="searchType" size="lg" :disabled="loading" :options="searchTypes" class="shrink-0">
                     <template #label>
                         <UIcon :name="searchType.icon" class="w-4 h-4" />
@@ -32,7 +32,7 @@
         </div>
         <div class="h-full relative pt-16 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
-                <musit-list v-if="searchMusicResult.length > 0" :data="searchMusicResult" />
+                <song-list v-if="searchMusicResult.length > 0" :data="searchMusicResult" />
                 <Overlay v-else text="💔没有搜索到相关的音乐" />
             </template>
             <template v-else>
@@ -87,15 +87,13 @@ const searchTypes = [
 
 const searchType = ref(searchTypes[0])
 
-const lastSearchType = ref<SearchType>(SearchType.music)
-
-const searchMusicResult = ref<SearchMusic[]>([])
-
 const inputRef = shallowRef<{
     input: HTMLInputElement;
 }>()
 
-const playingMusic = ref<SearchMusic>()
+const lastSearchType = ref<SearchType>(SearchType.music)
+
+const searchMusicResult = ref<SearchMusic[]>([])
 
 const searchVideoResult = ref<SearchVideo[]>([])
 
@@ -130,7 +128,6 @@ const getData = async (s: string) => {
         if (searchType.value.type === SearchType.music) {
             const data = await getSearch<SearchMusic[]>('/api/music/list', query)
             searchMusicResult.value = data
-            playingMusic.value = null
         }
         else {
             const data = await getSearch<SearchVideo[]>('/api/video/list', query)
