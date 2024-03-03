@@ -130,10 +130,13 @@ const getPlayerUrl = (url: string, proxy: boolean) => {
 }
 
 const updateEpisode = (index: number) => {
-    activeEpisode.value = index;
-    setCatchedParams(videoId, {
-        episode: index
-    })
+    if (activeEpisode.value !== index) {
+        activeEpisode.value = index
+        playerLoaded.value = false
+        setCatchedParams(videoId, {
+            episode: index
+        })
+    }
 }
 
 const reloadData = () => {
