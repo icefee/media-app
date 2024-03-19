@@ -1,4 +1,5 @@
 <template>
+
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中..' }}</Title>
     </Head>
@@ -7,12 +8,12 @@
         <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-lg shadow-black sm:overflow-y-auto"
             v-if="videoData">
             <div :style="{
-                height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
-            }" class="relative max-h-screen bg-black grow-0 shrink-0">
+            height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
+        }" class="relative max-h-screen bg-black grow-0 shrink-0">
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
-                    'opacity-100': playerLoaded
-                }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)"
-                    allow="fullscreen; autoplay" @load="onPlayerLoaded" />
+            'opacity-100': playerLoaded
+        }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="fullscreen; autoplay"
+                    @load="onPlayerLoaded" />
                 <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
             <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
@@ -20,10 +21,10 @@
             </div>
             <div class="px-2 pt-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
                 <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
-                    wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
-                    container: 'relative grow-1 overflow-hidden',
-                    base: 'h-full sm:h-auto'
-                }">
+            wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
+            container: 'relative grow-1 overflow-hidden',
+            base: 'h-full sm:h-auto'
+        }">
                     <template #profile>
                         <div class="flex space-x-2 pb-4 h-full">
                             <div class="w-32 sm:w-40 md:w-48 h-48 sm:h-60 md:h-72 flex-shrink-0">
@@ -49,7 +50,8 @@
                                     <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
                                         v-for="video, index in playList" :key="index">
                                         <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md"
-                                            variant="solid" block @click="updateEpisode(index)">{{ video.label }}</UButton>
+                                            variant="solid" block @click="updateEpisode(index)">{{ video.label }}
+                                        </UButton>
                                     </div>
                                 </div>
                             </div>
@@ -77,30 +79,36 @@ const activeSource = ref(0)
 const activeEpisode = ref(0)
 const playerLoaded = ref(false)
 
-interface CatchedParams {
+const currentPlayTime = ref(0)
+
+interface CachedParams {
     episode: number;
+    seek: number;
 }
 
 const route = useRoute()
 
+const createDefaultCacheParams = (): CachedParams => ({
+    episode: 0,
+    seek: 0
+})
+
 const videoId = <string>route.params.id;
 
-const getCatchedParams = (id: string) => {
+const getCatchParams = () => {
     try {
-        const { episode } = JSON.parse(
-            localStorage.getItem(id)
-        ) as CatchedParams
-        return {
-            episode
-        }
+        const params: CachedParams = JSON.parse(
+            localStorage.getItem(videoId)
+        )
+        return params
     }
     catch (err) {
-        return null;
+        return createDefaultCacheParams()
     }
 }
 
-const setCatchedParams = (id: string, value: CatchedParams) => {
-    localStorage.setItem(id, JSON.stringify(value))
+const setCatchParams = (value: CachedParams) => {
+    localStorage.setItem(videoId, JSON.stringify(value))
 }
 
 const { data, error, execute, refresh } = await useFetch<ApiJsonType<VideoInfo>>(`/api/video/${videoId}`, {
@@ -113,6 +121,8 @@ const playingVideo = computed(() => playList.value?.[activeEpisode.value])
 
 const posterUrl = computed(() => proxyUrl(videoData.value.pic))
 
+const isLastEpisode = computed(() => activeEpisode.value === playList.value.length - 1)
+
 const onPlayerLoaded = (event: Event) => {
     const frame = event.target as HTMLIFrameElement
     frame.focus()
@@ -120,37 +130,75 @@ const onPlayerLoaded = (event: Event) => {
 }
 
 const getPlayerUrl = (url: string, proxy: boolean) => {
+    const seek = currentPlayTime.value + ''
     const params: Record<string, string> = {
-        url: proxy ? proxyHlsUrl(url) : url
+        seek
     }
     if (proxy) {
+        params.url = proxyHlsUrl(url)
         params.proxy = '1'
+    }
+    else {
+        params.url = url
+    }
+    if (!isLastEpisode.value) {
+        params.next = '1'
     }
     return getParamsUrl(`${Api.assetSite}/video/player`, params)
 }
 
 const updateEpisode = (index: number) => {
     if (activeEpisode.value !== index) {
+        currentPlayTime.value = 0
         activeEpisode.value = index
         playerLoaded.value = false
-        setCatchedParams(videoId, {
+        setCatchParams({
+            seek: 0,
             episode: index
         })
     }
 }
+
+const playNext = () => updateEpisode(activeEpisode.value + 1)
 
 const reloadData = () => {
     refresh()
     error.value = null
 }
 
+const bindPlayerEventHandler = () => {
+    window.addEventListener('message', (event: MessageEvent<{
+        type: VideoPlayerEvent;
+        params?: VideoPlayState;
+    }>) => {
+        const { type, params } = event.data
+        switch (type) {
+            case 'play-next':
+                playNext()
+                break;
+            case 'play-end':
+                if (!isLastEpisode.value) {
+                    playNext()
+                }
+                break;
+            case 'play-time-update':
+                const { progress, duration } = params
+                setCatchParams({
+                    episode: activeEpisode.value,
+                    seek: progress * duration
+                })
+                break;
+            default:
+                break;
+        }
+    })
+}
+
 onMounted(() => {
-
     execute()
-
-    const params = getCatchedParams(videoId)
-    if (params) {
-        activeEpisode.value = params.episode ?? 0
-    }
+    const { episode, seek } = getCatchParams()
+    activeEpisode.value = episode
+    currentPlayTime.value = seek
+    bindPlayerEventHandler()
 })
 </script>

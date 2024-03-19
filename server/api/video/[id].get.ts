@@ -16,9 +16,9 @@ const getVideoData = async (url: string) => {
 export default defineEventHandler(
     async (event) => {
         const { id: queryId } = event.context.params!;
-        const { api, id } = Clue.parse(queryId)!;
+        const { key, id } = Clue.parse(queryId)!;
         const { type } = getQuery(event);
-        const apiUrl = `${Api.site}/api/video/${api}/${id}`;
+        const apiUrl = `${Api.site}/api/video/${key}/${id}`;
         const data = await getVideoData(apiUrl);
         if (type === 'poster') {
             return sendRedirect(event, data ? proxyUrl(data.pic) : `/image_fail.jpg`, 301)

@@ -1,4 +1,3 @@
-
 export const isDev = import.meta.env.NODE_ENV === 'development'
 
 export const isMobileDevice = () => {

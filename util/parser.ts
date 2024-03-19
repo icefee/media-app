@@ -1,8 +1,6 @@
-
 export function utf82utf16(source: string) {
-    var out, i, len, c;
+    var out = '', i, len, c;
     var char2, char3;
-    out = '';
     len = source.length;
     i = 0;
     while (i < len) {
@@ -24,5 +22,5 @@ export function utf82utf16(source: string) {
                 break;
         }
     }
-    return out;
+    return out
 }

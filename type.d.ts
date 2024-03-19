@@ -97,3 +97,17 @@ declare interface PlayState {
     duration: number;
     currentTime: number;
 }
+
+type VideoPlayerEvent = 'play-next' | 'play-end' | 'play-time-update'
+
+declare interface VideoPlayState {
+    progress: number;
+    buffered: number;
+    duration: number;
+}
+
+interface EventEmitter {
+    (event: 'next', params: undefined): void;
+    (event: 'end', params: undefined): void;
+    (event: 'time-update', params: VideoPlayState): void;
+}
