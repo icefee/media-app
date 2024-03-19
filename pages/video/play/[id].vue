@@ -97,10 +97,12 @@ const videoId = <string>route.params.id;
 
 const getCatchParams = () => {
     try {
-        const params: CachedParams = JSON.parse(
-            localStorage.getItem(videoId)
-        )
-        return params
+        const storage = localStorage.getItem(videoId)
+        if (storage) {
+            const params: CachedParams = JSON.parse(storage)
+            return params
+        }
+        throw new Error('no cached params')
     }
     catch (err) {
         return createDefaultCacheParams()
