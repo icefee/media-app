@@ -1,4 +1,4 @@
-import { getTextWithTimeout, getResponse, parseLrcText, escapeSymbols, getJson } from './common'
+import { getTextWithTimeout, parseLrcText, escapeSymbols, getJson } from './common'
 import { timeFormatter } from '~/util/date'
 import { userAgent } from '~/util/config'
 
@@ -136,5 +136,5 @@ export async function getLrcText(id: string) {
             const seconds = Math.floor(time)
             return `[${timeFormatter(seconds)}:${Math.round((time - seconds) * 1000)}]${text}`
         }
-    ).join('\n');
+    ).join('\n')
 }

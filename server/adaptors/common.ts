@@ -1,6 +1,6 @@
 import fetch, { Response } from 'node-fetch'
 import AbortController from 'abort-controller'
-import { type Adaptor } from '.';
+import { type Adaptor } from '.'
 import { isTextNotNull } from '~/util/string'
 export { isTextNotNull, escapeSymbols } from '~/util/string'
 

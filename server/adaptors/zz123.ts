@@ -1,10 +1,10 @@
-import { getResponse, parseLrcText, getTextWithTimeout } from './common';
-import { timeFormatter } from '~/util/date';
-import { utf82utf16 } from '~/util/parser';
+import { getResponse, parseLrcText, getTextWithTimeout } from './common'
+import { timeFormatter } from '~/util/date'
+import { utf82utf16 } from '~/util/parser'
 
-export const key = 'z';
+export const key = 'z'
 
-export const baseUrl = 'https://zz123.com';
+export const baseUrl = 'https://zz123.com'
 
 export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
     const searchParams = new URLSearchParams({

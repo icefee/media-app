@@ -1,9 +1,9 @@
-import { getTextWithTimeout, getJson, parseLrcText } from './common';
-import { timeFormatter } from '~/util/date';
+import { getTextWithTimeout, getJson, parseLrcText } from './common'
+import { timeFormatter } from '~/util/date'
 
 export const key = 'g';
 
-export const baseUrl = 'https://www.gequbao.com';
+export const baseUrl = 'https://www.gequbao.com'
 
 export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
     const url = `${baseUrl}/s/${s}`;
@@ -106,5 +106,5 @@ export async function getLrcText(id: string) {
             const seconds = Math.floor(time)
             return `[${timeFormatter(seconds)}:${Math.round((time - seconds) * 1000)}]${text}`
         }
-    ).join('\n');
+    ).join('\n')
 }
