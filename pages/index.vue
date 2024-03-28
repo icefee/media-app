@@ -16,13 +16,13 @@
                 </USelectMenu>
                 <UInput v-model="keyword" ref="inputRef" :loading="loading" size="lg" placeholder="输入关键词搜索.."
                     icon="i-heroicons-magnifying-glass-20-solid" :ui="{
-                        wrapper: 'relative grow sm:grow-0',
-                        icon: {
-                            trailing: {
-                                pointer: ''
-                            }
-                        }
-                    }">
+                wrapper: 'relative grow sm:grow-0',
+                icon: {
+                    trailing: {
+                        pointer: ''
+                    }
+                }
+            }">
                     <template #trailing>
                         <UButton v-show="keyword !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
                             :padded="false" @click="clearInput" />
@@ -144,6 +144,7 @@ const getData = async (s: string) => {
 const onSearch = async () => {
     if (!loading.value) {
         loading.value = true
+        inputRef.value?.input.blur()
         await getData(keyword.value)
         loading.value = false
     }

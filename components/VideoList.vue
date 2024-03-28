@@ -1,6 +1,6 @@
 <template>
     <div class="mb-5" v-for="resultGroup in data" :key="resultGroup.key">
-        <div class="sticky top-0 z-40 backdrop-blur-sm pl-4 py-3">
+        <div class="sticky top-0 z-20 backdrop-blur-sm pl-4 py-3">
             <h4>{{ resultGroup.name }}</h4>
         </div>
         <div class="flex flex-wrap px-2">
@@ -21,9 +21,9 @@ const { data } = defineProps<{
     data: SearchVideo[];
 }>()
 
-const videoId = (...args: Parameters<typeof Clue.create>) => Clue.create(...args)
+const videoId: typeof Clue.create = (...args) => Clue.create(...args)
 
-const videoUrl = (...args: Parameters<typeof Clue.create>) => {
+const videoUrl: typeof Clue.create = (...args) => {
     const sid = videoId(...args)
     return `/video/${sid}`
 }

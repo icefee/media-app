@@ -1,5 +1,4 @@
 <template>
-
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中..' }}</Title>
     </Head>
@@ -113,9 +112,12 @@ const setCatchParams = (value: CachedParams) => {
     localStorage.setItem(videoId, JSON.stringify(value))
 }
 
-const { data, error, execute, refresh } = await useFetch<ApiJsonType<VideoInfo>>(`/api/video/${videoId}`, {
-    immediate: false
-})
+const { data, error, execute, refresh } = await useFetch<ApiJsonType<VideoInfo>>(
+    `/api/video/${videoId}`,
+    {
+        immediate: false
+    }
+)
 
 const videoData = computed(() => data.value?.data)
 const playList = computed(() => videoData.value?.dataList[activeSource.value].urls)

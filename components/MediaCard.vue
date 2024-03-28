@@ -1,10 +1,10 @@
 <template>
-    <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-md">
+    <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-lg">
         <div class="w-28 h-40 flex-shrink-0">
             <ThumbLoader :src="src" :alt="title" />
         </div>
         <div class="flex flex-col space-y-2 grow p-2">
-            <h3 class="text-lg text-primary-500">{{ title }}</h3>
+            <h3 class="text-xl text-primary-500">{{ title }}</h3>
             <div class="grow">
                 <div class="flex items-center self-start space-x-2">
                     <UBadge :label="type" />
