@@ -10,9 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/ui": "^2.14.2",
+    "@nuxt/ui": "^2.15.1",
     "@types/node": "^18",
-    "nuxt": "^3.10.0"
+    "nuxt": "^3.11.0"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",

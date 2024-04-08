@@ -8,7 +8,7 @@
             ]" :music="music" :current="isActiveMusic(music)" :playState="playState" :error="hasError" @pause="pause"
                 @play="play(music)" @seek="onSeek" />
             <div class="text-center" v-if="songPages > 1">
-                <UButton block variant="soft" v-if="songPage < songPages" @click="loadMoreSongs">加载更多
+                <UButton block variant="soft" size="md" v-if="songPage < songPages" @click="loadMoreSongs">加载更多
                 </UButton>
                 <span v-else>已加载全部</span>
             </div>
