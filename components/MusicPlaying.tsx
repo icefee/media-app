@@ -54,4 +54,4 @@ function MusicPlaying({ animating = false, fontSize = '18px' }: MusicPlayingProp
     )
 }
 
-export default MusicPlaying;
+export default MusicPlaying

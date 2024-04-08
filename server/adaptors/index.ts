@@ -8,8 +8,8 @@ export type Adaptor = typeof g.key | typeof z.key | typeof t.key
 
 export const adaptors: Adaptor[] = [
     g.key,
-    t.key,
-    z.key
+    z.key,
+    t.key
 ]
 
 export function createApiAdaptor(key: Adaptor) {
