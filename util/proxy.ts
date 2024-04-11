@@ -30,7 +30,7 @@ function parseTokenUrl(url: string, parser: UrlParser) {
 export function pureHlsUrl(url: string) {
     return parseTokenUrl(
         url,
-        clue => `${assetApiPrefix}/pure/${clue}.m3u8?cors=1`
+        clue => `${assetApiPrefix}/pure/${clue}.m3u8`
     )
 }
 
