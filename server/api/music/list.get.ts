@@ -1,10 +1,10 @@
 import { createApiAdaptor, adaptors } from '~/server/adaptors'
+import { createPayload } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
         const { s } = getQuery(event)
         const list: SearchMusic[] = []
-
         for (const k of adaptors) {
             const adaptor = createApiAdaptor(k)!
             const result = await adaptor.getMusicSearch(s as string)
@@ -12,20 +12,6 @@ export default defineEventHandler(
                 list.push(...result)
             }
         }
-
-        if (list) {
-            return {
-                code: 0,
-                data: list,
-                msg: '成功'
-            }
-        }
-        else {
-            return {
-                code: -1,
-                data: null,
-                msg: '失败'
-            }
-        }
+        return createPayload(list)
     }
 )

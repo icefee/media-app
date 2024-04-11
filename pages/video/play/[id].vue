@@ -1,4 +1,5 @@
 <template>
+
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中..' }}</Title>
     </Head>
@@ -7,11 +8,11 @@
         <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-lg shadow-black sm:overflow-y-auto"
             v-if="videoData">
             <div :style="{
-            height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
-        }" class="relative max-h-screen bg-black grow-0 shrink-0">
+                height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
+            }" class="relative max-h-screen bg-black grow-0 shrink-0">
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
-            'opacity-100': playerLoaded
-        }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="fullscreen; autoplay"
+                    'opacity-100': playerLoaded
+                }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="fullscreen; autoplay"
                     @load="onPlayerLoaded" />
                 <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
@@ -20,10 +21,10 @@
             </div>
             <div class="px-2 pt-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
                 <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
-            wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
-            container: 'relative grow-1 overflow-hidden',
-            base: 'h-full sm:h-auto'
-        }">
+                    wrapper: 'relative space-y-2 flex flex-col h-full overflow-hidden',
+                    container: 'relative grow-1 overflow-hidden',
+                    base: 'h-full sm:h-auto'
+                }">
                     <template #profile>
                         <div class="flex space-x-2 pb-4 h-full">
                             <div class="w-32 sm:w-40 md:w-48 h-48 sm:h-60 md:h-72 flex-shrink-0">
@@ -113,7 +114,7 @@ const setCatchParams = (value: CachedParams) => {
 }
 
 const { data, error, execute, refresh } = await useFetch<ApiJsonType<VideoInfo>>(
-    `/api/video/${videoId}`,
+    `/api/video/${videoId}?pure=0`,
     {
         immediate: false
     }

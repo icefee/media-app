@@ -1,4 +1,5 @@
 import { createApiAdaptor, parseId } from '~/server/adaptors'
+import { createErrorPayload, fileNotFound } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -14,11 +15,7 @@ export default defineEventHandler(
             send(event, lrcText)
         }
         else {
-            return {
-                code: -1,
-                data: null,
-                msg: 'lrc file not found.'
-            }
+            return createErrorPayload(fileNotFound)
         }
     }
 )

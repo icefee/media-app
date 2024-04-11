@@ -1,4 +1,5 @@
 import { createApiAdaptor, parseId } from '~/server/adaptors'
+import { createErrorPayload, fileNotFound } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -9,11 +10,7 @@ export default defineEventHandler(
             return sendRedirect(event, url, 301)
         }
         else {
-            return {
-                code: -1,
-                data: null,
-                msg: '失败'
-            }
+            return createErrorPayload(fileNotFound)
         }
     }
 )

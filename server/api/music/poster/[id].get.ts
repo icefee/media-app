@@ -1,5 +1,6 @@
+import { Readable } from 'stream'
 import { createApiAdaptor, defaultPoster, parseId, getResponse } from '~/server/adaptors'
-import { Readable } from 'stream';
+import { fileNotFound } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -25,7 +26,7 @@ export default defineEventHandler(
                 return sendStream(event, Readable.from(Buffer.from(arrayBuffer)))
             }
             else {
-                throw new Error('can not find poster')
+                throw new Error(fileNotFound)
             }
         }
         catch (err) {

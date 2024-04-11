@@ -1,5 +1,6 @@
+import { Readable } from 'stream'
 import { parseId, createApiAdaptor, getResponse } from '~/server/adaptors'
-import { Readable } from 'stream';
+import { createErrorPayload, fileNotFound } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -11,11 +12,7 @@ export default defineEventHandler(
         const contentType = headers.get('content-type')
         if (contentType && contentType.match(/text\/html/)) {
             setResponseStatus(event, 200)
-            return {
-                code: -1,
-                data: null,
-                msg: 'file not found.'
-            }
+            return createErrorPayload(fileNotFound)
         }
         else {
             for (const key of headers.keys()) {

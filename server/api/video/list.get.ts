@@ -1,5 +1,6 @@
 import { getJson } from '~/server/adaptors'
 import { Api } from '~/util/config'
+import { createErrorPayload } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -11,11 +12,7 @@ export default defineEventHandler(
             return response
         }
         catch (err) {
-            return {
-                code: -1,
-                data: null,
-                msg: String(err)
-            }
+            return createErrorPayload(err)
         }
     }
 )
