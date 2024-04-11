@@ -7,7 +7,10 @@ export interface UrlParser {
     (url: string): string;
 }
 
-export function getParamsUrl(url: string, params: Record<string, string>) {
+export function getParamsUrl(
+    url: string,
+    params: Record<string, string>
+) {
     const urlSearchParams = new URLSearchParams(params)
     return `${url}?${urlSearchParams}`
 }
@@ -25,9 +28,15 @@ function parseTokenUrl(url: string, parser: UrlParser) {
 }
 
 export function pureHlsUrl(url: string) {
-    return parseTokenUrl(url, token => `${assetApiPrefix}/pure/${token}.m3u8`)
+    return parseTokenUrl(
+        url,
+        clue => `${assetApiPrefix}/pure/${clue}.m3u8?cors=1`
+    )
 }
 
 export function proxyHlsUrl(url: string) {
-    return parseTokenUrl(url, token => `${assetApiPrefix}/proxy/${token}.m3u8`)
+    return parseTokenUrl(
+        url,
+        clue => `${assetApiPrefix}/proxy/${clue}.m3u8`
+    )
 }
