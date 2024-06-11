@@ -6,11 +6,11 @@ export const key = 'z'
 
 export const baseUrl = 'https://zz123.com'
 
-export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
+export async function getMusicSearch(s: string): Promise<SearchMusic[] | null> {
     const searchParams = new URLSearchParams({
         key: s
     })
-    const url = `${baseUrl}/search/?${searchParams}`;
+    const url = `${baseUrl}/search/?${searchParams}`
     try {
         const html = await getTextWithTimeout(url)
         const matchBlocks = html.replace(/[\n\r]+/g, '').match(
@@ -34,10 +34,10 @@ export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
                 }
             )
         }
-        return [];
+        return []
     }
     catch (err) {
-        return null;
+        return null
     }
 }
 

@@ -50,12 +50,12 @@ async function getPageSongs(s: string, page: number) {
     catch (err) {
         return {
             html: '',
-            songs: []
+            songs: null
         }
     }
 }
 
-export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
+export async function getMusicSearch(s: string): Promise<SearchMusic[] | null> {
     const { html, songs } = await getPageSongs(s, 1)
     const pageMatcher = new RegExp(`<a href="/so/${s}/\\d+.html">尾页</a>`)
     const pageMatch = html.match(pageMatcher)

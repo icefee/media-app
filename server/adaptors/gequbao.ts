@@ -5,7 +5,7 @@ export const key = 'g';
 
 export const baseUrl = 'https://www.gequbao.com'
 
-export async function getMusicSearch(s: string): Promise<SearchMusic[]> {
+export async function getMusicSearch(s: string): Promise<SearchMusic[] | null> {
     const url = `${baseUrl}/s/${s}`;
     try {
         const html = await getTextWithTimeout(url)
