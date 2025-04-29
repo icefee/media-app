@@ -37,18 +37,16 @@ export async function getMusicSearch(s: string): Promise<SearchMusic[] | null> {
     }
 }
 
-function parsePosterUrl(html: string) {
-    const matchBlock = html.match(
-        /mp3_cover\s=\s'https?:\/\/[^']+'/
-    )
-    return matchBlock ? matchBlock[0].match(/https?:\/\/[^']+/)[0] : null
-}
-
 export async function parsePoster(id: string) {
     try {
         const html = await getTextWithTimeout(`${baseUrl}/music/${id}`)
-        const poster = parsePosterUrl(html)
-        return poster;
+        const matches = html.replace(/\\\//g, '/').match(
+            /(?<="mp3_cover":")https?:\/\/[^']+?(?=")/
+        )
+        if (matches) {
+            return matches[0]
+        }
+        return null;
     }
     catch (err) {
         return null
@@ -57,8 +55,7 @@ export async function parsePoster(id: string) {
 
 async function getPlayUrl(id: string) {
     const searchParams = new URLSearchParams({
-        id,
-        json: '1'
+        id
     })
     const { data } = await getJson<{
         code: number;
@@ -72,14 +69,10 @@ async function getPlayUrl(id: string) {
 export async function parseMusicUrl(id: string) {
     try {
         const html = await getTextWithTimeout(`${baseUrl}/music/${id}`)
-        const urlMatcher = /https?:\/\/[^']+/
-        const matchBlock = html.match(
-            new RegExp(`window.mp3_url = '${urlMatcher.source}'`)
-        )
-        if (matchBlock) {
-            return matchBlock[0].match(urlMatcher)[0]
-        }
-        return getPlayUrl(id)
+        const clue = html.match(
+            /(?<="play_id":")[\w\=]+/
+        )?.[0]
+        return getPlayUrl(clue)
     }
     catch (err) {
         return null

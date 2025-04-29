@@ -4,11 +4,11 @@ import { createErrorPayload } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
-        const searchParams = new URLSearchParams(
-            getQuery(event) as Record<string, string>
-        )
         try {
-            const response = await getJson(`${Api.site}/api/video/list?${searchParams}`)
+            const params = new URLSearchParams(
+                getQuery(event)
+            )
+            const response = await getJson(`${Api.site}/api/video/list?${params}`)
             return response
         }
         catch (err) {

@@ -2,7 +2,7 @@ function useMessage() {
     const toast = useToast()
     const showError = (errText: string) => {
         toast.add({
-            color: 'red',
+            color: 'error',
             icon: 'i-heroicons-x-circle-20-solid',
             title: errText
         })

@@ -14,4 +14,8 @@ export const createErrorPayload = (error: any = '失败') => {
     }
 }
 
+export const parseQueryValue = <T = any>(value: T | T[]) => {
+    return String(Array.isArray(value) ? value[0] : value)
+}
+
 export const fileNotFound = 'file not found.'

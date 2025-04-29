@@ -1,5 +1,4 @@
 <template>
-
     <Head>
         <Title>{{ videoData ? videoData.name : error ? '数据加载失败' : '加载中..' }}</Title>
     </Head>
@@ -12,7 +11,7 @@
             }" class="relative max-h-screen bg-black grow-0 shrink-0">
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
                     'opacity-100': playerLoaded
-                }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url, videoData.proxy)" allow="fullscreen; autoplay"
+                }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url)" allow="fullscreen; autoplay"
                     @load="onPlayerLoaded" />
                 <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
@@ -49,7 +48,7 @@
                                 <div class="flex flex-wrap">
                                     <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
                                         v-for="video, index in playList" :key="index">
-                                        <UButton :color="activeEpisode === index ? 'primary' : 'gray'" size="md"
+                                        <UButton :color="activeEpisode === index ? 'primary' : 'neutral'" size="md"
                                             variant="solid" block @click="updateEpisode(index)">{{ video.label }}
                                         </UButton>
                                     </div>
@@ -134,17 +133,11 @@ const onPlayerLoaded = (event: Event) => {
     playerLoaded.value = true
 }
 
-const getPlayerUrl = (url: string, proxy: boolean) => {
+const getPlayerUrl = (url: string) => {
     const seek = currentPlayTime.value + ''
     const params: Record<string, string> = {
-        seek
-    }
-    if (proxy) {
-        params.url = proxyHlsUrl(url)
-        params.proxy = '1'
-    }
-    else {
-        params.url = url
+        seek,
+        url
     }
     if (!isLastEpisode.value) {
         params.next = '1'

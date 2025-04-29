@@ -1,5 +1,5 @@
 import { createApiAdaptor, adaptors } from '~/server/adaptors'
-import { createPayload } from '~/util/middleware'
+import { createPayload, parseQueryValue } from '~/util/middleware'
 
 export default defineEventHandler(
     async (event) => {
@@ -8,7 +8,9 @@ export default defineEventHandler(
             adaptors.map<Promise<SearchMusic[] | null>>(
                 (k) => {
                     const adaptor = createApiAdaptor(k)!
-                    return adaptor.getMusicSearch(s as string)
+                    return adaptor.getMusicSearch(
+                        parseQueryValue(s)
+                    )
                 }
             )
         )).reduce(

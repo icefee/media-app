@@ -3,9 +3,11 @@ export default defineNuxtConfig({
     typescript: {
         strict: true
     },
-    modules: [
-        '@nuxt/ui'
-    ],
+    ui: {
+        fonts: false
+    },
+    css: ['~/assets/style.css'],
+    modules: ['@nuxt/ui'],
     app: {
         head: {
             link: [
@@ -15,5 +17,6 @@ export default defineNuxtConfig({
                 }
             ]
         }
-    }
+    },
+    compatibilityDate: 'latest'
 })

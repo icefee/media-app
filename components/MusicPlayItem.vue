@@ -12,7 +12,8 @@
                     v-if="current && isMediaReady">
                     <MusicPlaying fontSize="24px" :animating="playState.playing" />
                 </div>
-                <div class="absolute flex justify-center items-center inset-0" v-if="current && !isMediaReady && !error">
+                <div class="absolute flex justify-center items-center inset-0"
+                    v-if="current && !isMediaReady && !error">
                     <Spinner class="text-primary-500 text-2xl dark:text-primary-400" />
                 </div>
             </div>
@@ -28,7 +29,7 @@
             </div>
             <div class="flex items-center gap-x-2 pr-1" v-if="current">
                 <span class="text-sm shrink-0">{{ durationText }}</span>
-                <URange size="sm" :max="1" :step=".000001" :disabled="!isMediaReady" :model-value="rangeValue"
+                <USlider size="sm" :max="1" :step=".000001" :disabled="!isMediaReady" :model-value="rangeValue"
                     @update:model-value="onRangeChange" />
             </div>
         </div>
