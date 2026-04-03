@@ -11,6 +11,9 @@
     },
     "strict": false
   },
+  "include": [
+    "../type.d.ts"
+  ],
   "exclude": [
     "../public"
   ]

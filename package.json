@@ -16,7 +16,6 @@
     "nuxt": "^4.4.2"
   },
   "dependencies": {
-    "abort-controller": "^3.0.0",
     "node-fetch": "^3.3.2",
     "tailwindcss": "^4.2.2"
   },

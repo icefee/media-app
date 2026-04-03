@@ -1,7 +1,7 @@
 import fetch, { Response } from 'node-fetch'
-import AbortController from 'abort-controller'
-import { type Adaptor } from '.'
+import type { Adaptor } from '.'
 import { isTextNotNull } from '~/util/string'
+import { userAgent } from '~/util/config'
 export { isTextNotNull, escapeSymbols } from '~/util/string'
 
 export const defaultPoster = `/poster.jpg`
@@ -23,23 +23,23 @@ export async function getJson<T = any>(...args: Parameters<typeof fetch>): Promi
 }
 
 export async function getTextWithTimeout(...args: Parameters<typeof fetch>): Promise<string> {
-    const [url, init] = args;
-    const abortController = new AbortController();
-    const timeout = setTimeout(() => abortController.abort(), 5e3);
+    const [url, init] = args
+    const abortController = new AbortController()
+    const timeout = setTimeout(() => abortController.abort(), 5e3)
     try {
         const text = await getText(url, {
             ...init,
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.121 Safari/537.36'
+                'user-agent': userAgent
             },
-            signal: abortController.signal as AbortSignal
+            signal: abortController.signal
         })
-        return text;
+        return text
     }
     catch (err) {
-        return null;
+        return null
     } finally {
-        clearTimeout(timeout);
+        clearTimeout(timeout)
     }
 }
 
@@ -52,7 +52,7 @@ export function parseId(id: string) {
 }
 
 function toPrecision(n: number) {
-    return Math.round((n * 100)) / 100;
+    return Math.round((n * 100)) / 100
 }
 
 function parseDuration(time: string) {
