@@ -1,6 +1,6 @@
 <template>
     <div class="flex rounded-md overflow-hidden bg-white dark:bg-slate-800 shadow-lg">
-        <div class="w-28 h-40 flex-shrink-0">
+        <div class="w-28 h-40 shrink-0">
             <ThumbLoader :src="src" :alt="title" />
         </div>
         <div class="flex flex-col space-y-2 grow p-2">
@@ -23,7 +23,7 @@ defineProps<{
     src: string
     title: string;
     type: string;
-    subtitle: string;
+    subtitle?: string;
     tail?: string;
 }>()
 </script>

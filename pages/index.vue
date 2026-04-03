@@ -1,14 +1,15 @@
 <template>
+
     <Head>
         <Title>音乐/影视搜索</Title>
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <div
             class="absolute z-30 left-0 top-0 flex justify-center items-center self-start w-full backdrop-blur-sm border-black/5 dark:border-white/5 space-x-2 p-3">
-            <form name="search" class="flex w-full sm:w-auto" @submit.prevent="onSearch">
+            <form name="search" class="flex w-full gap-2 sm:w-auto" @submit.prevent="onSearch">
                 <USelect v-model="searchType" :items="searchTypes" value-key="value" :icon="icon" class="w-28" />
-                <UInput v-model="keyword" :disabled="loading" ref="searchInputRef" placeholder="输入关键词搜索.."
-                    :ui="{ trailing: 'pe-1' }">
+                <UInput class="grow sm:grow-0" v-model="keyword" :disabled="loading" ref="searchInputRef"
+                    placeholder="输入关键词搜索.." :ui="{ trailing: 'pe-1' }">
                     <template v-if="keyword?.length" #trailing>
                         <UButton color="neutral" variant="link" size="sm" icon="i-heroicons-x-mark-20-solid"
                             @click="clearInput" />
@@ -16,14 +17,14 @@
                 </UInput>
             </form>
         </div>
-        <div class="h-full relative pt-16 overflow-y-auto" v-if="searchComplete">
+        <div class="h-full relative pt-14 overflow-y-auto" v-if="searchComplete">
             <template v-if="lastSearchType === SearchType.music">
                 <song-list v-if="searchMusicResult.length > 0" :data="searchMusicResult" />
-                <Overlay v-else text="💔没有搜索到相关的音乐" />
+                <Overlay v-else-if="!loading" text="💔没有搜索到相关的音乐" />
             </template>
             <template v-else>
                 <video-list v-if="searchVideoResult.length > 0" :data="searchVideoResult" />
-                <Overlay v-else text="💔没有搜索到相关的影视" />
+                <Overlay v-else-if="!loading" text="💔没有搜索到相关的影视" />
             </template>
         </div>
         <div class="flex grow justify-center items-center" v-else-if="!loading">
