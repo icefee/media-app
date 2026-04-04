@@ -5,10 +5,11 @@
     </Head>
     <div class="flex flex-col h-full bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <div
-            class="absolute z-30 left-0 top-0 flex justify-center items-center self-start w-full backdrop-blur-sm border-black/5 dark:border-white/5 space-x-2 p-3">
+            class="absolute z-30 left-0 top-0 flex justify-center items-center self-start w-full bg-inherit border-black/5 dark:border-white/5 space-x-2 p-3">
             <form name="search" class="flex w-full gap-2 sm:w-auto" @submit.prevent="onSearch">
-                <USelect v-model="searchType" :items="searchTypes" value-key="value" :icon="icon" class="w-28" />
-                <UInput class="grow sm:grow-0" v-model="keyword" :disabled="loading" ref="searchInputRef"
+                <USelect v-model="searchType" size="lg" :items="searchTypes" value-key="value" :icon="icon"
+                    class="w-28" />
+                <UInput class="grow sm:grow-0" size="lg" v-model="keyword" :disabled="loading" ref="searchInputRef"
                     placeholder="输入关键词搜索.." :ui="{ trailing: 'pe-1' }">
                     <template v-if="keyword?.length" #trailing>
                         <UButton color="neutral" variant="link" size="sm" icon="i-heroicons-x-mark-20-solid"

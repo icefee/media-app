@@ -1,6 +1,6 @@
 <template>
     <div class="w-full md:max-w-xl mx-auto">
-        <div class="sticky top-0 h-10 leading-10 backdrop-blur-sm rounded text-sm pl-3 z-10">
+        <div class="sticky top-0 h-10 leading-10 backdrop-blur-lg rounded text-sm pl-3 z-10">
             搜索到{{ data.length }}首歌曲</div>
         <div class="space-y-2 pb-2 px-2">
             <MusicPlayItem v-for="music in renderSongs" :key="music.id" :class="[
