@@ -1,4 +1,4 @@
-import { getResponse, parseLrcText, getTextWithTimeout } from './common'
+import { getJson, getResponse, getTextWithTimeout, parseLrcText } from './common'
 import { timeFormatter } from '~/util/date'
 import { utf82utf16 } from '~/util/parser'
 
@@ -58,7 +58,7 @@ interface MusicParseApiJson<T = unknown> {
 }
 
 async function getMusicInfo(id: string) {
-    const { status, data } = await getResponse(`${baseUrl}/ajax/`, {
+    const { status, data } = await getJson<MusicParseApiJson<MusicInfo>>(`${baseUrl}/ajax/`, {
         method: 'POST',
         body: new URLSearchParams({
             act: 'songinfo',
@@ -68,9 +68,7 @@ async function getMusicInfo(id: string) {
         headers: {
             'referer': baseUrl
         }
-    }).then(
-        response => response.json() as Promise<MusicParseApiJson<MusicInfo>>
-    )
+    })
     if (status === 200) {
         return data
     }

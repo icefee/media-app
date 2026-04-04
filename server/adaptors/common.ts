@@ -2,6 +2,8 @@ import fetch, { Response } from 'node-fetch'
 import type { Adaptor } from '.'
 import { isTextNotNull } from '~/util/string'
 import { userAgent } from '~/util/config'
+
+export * as cheerio from 'cheerio'
 export { isTextNotNull, escapeSymbols } from '~/util/string'
 
 export const defaultPoster = `/poster.jpg`

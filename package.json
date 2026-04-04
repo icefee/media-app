@@ -12,7 +12,8 @@
     "@iconify-json/heroicons": "^1.2.3",
     "@nuxt/ui": "^4.6.1",
     "@types/node": "^24",
-    "nuxt": "^4.4.2"
+    "nuxt": "^4.4.2",
+    "cheerio": "^1.2.0"
   },
   "dependencies": {
     "node-fetch": "^3.3.2",
