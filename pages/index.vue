@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, onMounted, unref } from 'vue'
+import { ref, shallowRef, unref } from 'vue'
 import type { SelectItem } from '@nuxt/ui'
 import { getParamsUrl } from '~/util/proxy'
 

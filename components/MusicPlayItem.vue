@@ -21,9 +21,9 @@
         <div class="flex flex-col overflow-hidden grow" :class="{
             'justify-between': current
         }">
-            <div class="flex" :class="current ? 'gap-x-2' : 'h-full flex-col justify-around'">
-                <p class="whitespace-nowrap overflow-hidden text-ellipsis">{{ music.name }}</p>
-                <p class="opacity-70 text-sm" :class="{
+            <div class="flex whitespace-nowrap" :class="current ? 'gap-x-2' : 'h-full flex-col justify-around'">
+                <p class="shrink-0 overflow-hidden text-ellipsis">{{ music.name }}</p>
+                <p class="opacity-70 text-sm overflow-hidden text-ellipsis" :class="{
                     'self-end': current
                 }">{{ music.artist }}</p>
             </div>
@@ -34,9 +34,10 @@
             </div>
         </div>
         <template #trailing>
-            <UButton v-if="current && playState.playing" icon="i-heroicons-pause-20-solid" size="xl" variant="link"
-                @click="$emit('pause')" />
-            <UButton v-else icon="i-heroicons-play-20-solid" size="xl" variant="link" @click="$emit('play')" />
+            <UButton class="cursor-pointer" v-if="current && playState.playing" icon="i-heroicons-pause-20-solid"
+                size="xl" variant="link" @click="$emit('pause')" />
+            <UButton class="cursor-pointer" v-else icon="i-heroicons-play-20-solid" size="xl" variant="link"
+                @click="$emit('play')" />
         </template>
     </MediaListItem>
 </template>

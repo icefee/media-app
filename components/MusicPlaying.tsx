@@ -13,23 +13,26 @@ function MusicPlaying({ animating = false, fontSize = '18px' }: MusicPlayingProp
     ];
 
     return (
-        <div style={{
-            width: '1em',
-            height: '1em',
-            aspectRatio: '1 / 1',
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontSize,
-            '--bar-width': '12%'
-        }}>
+        <div
+            style={{
+                width: '1em',
+                height: '1em',
+                aspectRatio: '1 / 1',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize,
+                '--bar-width': '15%'
+            }}
+        >
             <style type="text/css">
                 {
                     `@keyframes scale-y {
                         from {
-                            transform: scaleY(0);
+                            height: 20%;
                         }
                         to {
-                            transform: scaleY(1);
+                            height: 100%;
                         }
                     }`
                 }
@@ -41,6 +44,7 @@ function MusicPlaying({ animating = false, fontSize = '18px' }: MusicPlayingProp
                             style={{
                                 width: 'var(--bar-width)',
                                 height: '100%',
+                                borderRadius: '2px',
                                 backgroundImage: 'linear-gradient(to bottom, #a78bfa, #03a9f4)',
                                 animation: `.4s linear ${delay}s infinite alternate none scale-y`,
                                 animationPlayState: animating ? 'running' : 'paused'
