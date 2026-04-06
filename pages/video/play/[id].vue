@@ -5,32 +5,30 @@
     </Head>
     <div
         class="bg-linear-to-tr from-indigo-200 to-violet-300 dark:from-indigo-500 dark:to-blue-500 h-full overflow-hidden">
-        <div class="flex flex-col sm:block max-w-6xl h-full mx-auto overflow-hidden bg-white dark:bg-black shadow-lg shadow-black sm:overflow-y-auto"
+        <div class="flex flex-col sm:block max-w-6xl h-full mx-auto bg-white dark:bg-black shadow-lg shadow-black overflow-y-auto"
             v-if="videoData">
             <div :style="{
-                height: 'clamp(40%, calc(min(100vw, 1152px) * .625), 600px)'
-            }" class="relative max-h-screen bg-black grow-0 shrink-0">
+                height: 'clamp(50%, calc(min(100vw, 1152px) * .625), 600px)'
+            }" class="sticky top-0 z-10 sm:relative max-h-screen bg-black grow-0 shrink-0">
                 <iframe class="block w-full h-full border-none opacity-0" :class="{
                     'opacity-100': playerLoaded
                 }" :key="activeEpisode" :src="getPlayerUrl(playingVideo.url)" allow="fullscreen; autoplay"
                     @load="onPlayerLoaded" />
                 <LoadingOverlay :backdrop="false" :background="false" v-if="!playerLoaded" />
             </div>
-            <div class="p-3 text-center border-b border-gray-200 dark:border-gray-900">
+            <div class="p-3 text-center border-y border-gray-200 dark:border-gray-800">
                 <span>{{ videoData.name }} - {{ playList[activeEpisode].label }}</span>
             </div>
-            <div class="px-2 pt-2 grow overflow-y-auto sm:grow-0 sm:overflow-hidden">
+            <div class="px-2 pt-2">
                 <UTabs :items="[{ label: '简介', slot: 'profile' }, { label: '选集', slot: 'series' }]" :ui="{
-                    root: 'relative space-y-2 flex flex-col h-full overflow-hidden',
-                    list: 'relative grow-1 overflow-hidden',
-                    content: 'h-full sm:h-auto'
+                    trigger: 'cursor-pointer'
                 }">
                     <template #profile>
-                        <div class="flex space-x-2 pb-4 h-full">
+                        <div class="flex space-x-2 pb-2 h-full">
                             <div class="w-32 sm:w-40 md:w-48 h-48 sm:h-60 md:h-72 shrink-0">
                                 <ThumbLoader :src="posterUrl" :alt="videoData.name" />
                             </div>
-                            <div class="grow pb-5 overflow-y-auto">
+                            <div class="pb-2">
                                 <h4 class="text-2xl text-primary">{{ videoData.name }}</h4>
                                 <p class="mb-2">{{ videoData.note }}</p>
                                 <p v-if="videoData.subname">又名: {{ videoData.subname }}</p>
@@ -44,15 +42,13 @@
                         </div>
                     </template>
                     <template #series>
-                        <div class="h-full overflow-y-auto">
-                            <div class="pb-5 min-h-62.5">
-                                <div class="flex flex-wrap">
-                                    <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
-                                        v-for="video, index in playList" :key="index">
-                                        <UButton :color="activeEpisode === index ? 'primary' : 'neutral'" size="md"
-                                            variant="solid" block @click="updateEpisode(index)">{{ video.label }}
-                                        </UButton>
-                                    </div>
+                        <div class="pb-2 min-h-62.5">
+                            <div class="flex flex-wrap">
+                                <div class="p-1 w-1/3 sm:w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/8"
+                                    v-for="video, index in playList" :key="index">
+                                    <UButton :color="activeEpisode === index ? 'primary' : 'neutral'" size="md"
+                                        variant="solid" block @click="updateEpisode(index)">{{ video.label }}
+                                    </UButton>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +68,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
-import { proxyUrl, proxyHlsUrl, getParamsUrl } from '~/util/proxy'
+import { proxyUrl, getParamsUrl } from '~/util/proxy'
 import { Api } from '~/util/config'
 
 const activeSource = ref(0)
